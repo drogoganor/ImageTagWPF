@@ -52,9 +52,9 @@ Tags also have a heirarchy - you can specify child tags for each tag using the l
 
 ### Output Folders
 
-![screenshot](https://raw.githubusercontent.com/drogoganor/ImageTagWPF/master/images/outputfolders.jpg)
-
 Select the "Output Folders" tab to specify output directories for tagged images.
+
+![screenshot](https://raw.githubusercontent.com/drogoganor/ImageTagWPF/master/images/outputfolders.jpg)
 
 On this tab you can construct an output directory tree for your tagged images. 
 
