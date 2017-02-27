@@ -1,0 +1,139 @@
+﻿<UserControl x:Class="ImageTagWPF.Controls.TagSelectControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ImageTagWPF.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="600">
+    <UserControl.Resources>
+        <Style x:Key="_ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="_Border"
+                                Padding="2"
+                                Background="GreenYellow"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="_Border" Property="Background" Value="LightBlue"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="_Border" Property="Background" Value="AliceBlue"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28" />
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="32" />
+        </Grid.RowDefinitions>
+
+
+        <Grid Grid.Row="0" Grid.Column="0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="268" />
+                <ColumnDefinition Width="2.5*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Label x:Name="label" Content="Filter:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,2,0,0"/>
+                <TextBox x:Name="FilterTextBox" HorizontalAlignment="Left" Height="23" Margin="44,3,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="123"
+                         TextChanged="FilterTextBox_OnTextChanged"/>
+                <Button x:Name="ClearButton" Content="Clear Filter" HorizontalAlignment="Left" Margin="172,3,0,0" VerticalAlignment="Top" Width="75" Height="23"
+                        Click="ClearButton_OnClick"/>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <CheckBox x:Name="DescriptorCheckBox" IsChecked="True" Content="Descriptor" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" Width="75" Height="23"
+                          Checked="CheckBox_OnChanged" Unchecked="CheckBox_OnChanged" />
+                <CheckBox x:Name="CharacterCheckBox" IsChecked="True" Content="Character" HorizontalAlignment="Left" Margin="95,8,0,0" VerticalAlignment="Top" Width="75" Height="23"
+                          Checked="CheckBox_OnChanged" Unchecked="CheckBox_OnChanged" />
+                <CheckBox x:Name="SeriesCheckBox" IsChecked="True" Content="Series" HorizontalAlignment="Left" Margin="175,8,0,0" VerticalAlignment="Top" Width="58" Height="23"
+                          Checked="CheckBox_OnChanged" Unchecked="CheckBox_OnChanged" />
+                <CheckBox x:Name="ArtistCheckBox" IsChecked="True" Content="Artist" HorizontalAlignment="Left" Margin="238,8,0,0" VerticalAlignment="Top" Width="55" Height="23"
+                          Checked="CheckBox_OnChanged" Unchecked="CheckBox_OnChanged" />
+
+            </Grid>
+
+
+        </Grid>
+        <TabControl Grid.Row="1" Grid.Column="0"
+                    Margin="10,4,10,4">
+            <TabItem Header="All">
+                <Grid>
+                    
+                    <ListBox x:Name="TagViewer"  SelectionMode="Multiple"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                SelectionChanged="TagViewer_SelectionChanged" 
+                 ItemContainerStyle="{DynamicResource _ListBoxItemStyle}">
+
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding Tag.Name}" Foreground="{Binding HexColor}" Margin="10,10,10,10">
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    
+                    
+                </Grid>
+            </TabItem>
+            
+            <TabItem Header="Recent">
+                <Grid>
+
+                    <ListBox x:Name="TagViewerRecent"  SelectionMode="Multiple"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                SelectionChanged="TagViewerRecent_SelectionChanged" 
+                 ItemContainerStyle="{DynamicResource _ListBoxItemStyle}">
+
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding Tag.Name}" Foreground="{Binding HexColor}" Margin="10,10,10,10">
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+        <Grid Grid.Row="2">
+            <Label x:Name="label1" Content="Rating:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <local:StarRatingControl x:Name="RatingControl" HorizontalAlignment="Left" Margin="52,2,0,0" VerticalAlignment="Top"
+                                     OnRatingChanged="RatingControl_OnOnRatingChanged"/>
+
+        </Grid>
+        
+    </Grid>
+</UserControl>

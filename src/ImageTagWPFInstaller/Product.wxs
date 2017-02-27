@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="ImageTagWPF" Language="1033" Version="1.0.0.0" Manufacturer="DMW" UpgradeCode="4f0e3cd0-9a6a-4993-965c-b5ba979824cd">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="ImageTagWPF" Title="ImageTagWPF" Level="1">
+      <ComponentGroupRef Id="ModComponents" />
+    </Feature>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+
+    <UIRef Id="WixUI_Custom"/>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="WINDOWSVOLUME">
+
+        <Directory Id="ProgramFilesFolder">
+          <Directory Id="INSTALLDIR" Name="ImageTagWPF">
+          </Directory>
+        </Directory>
+        
+      </Directory>
+    </Directory>
+  </Fragment>
+
+</Wix>

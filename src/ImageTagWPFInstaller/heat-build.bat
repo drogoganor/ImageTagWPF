@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\WiX Toolset v3.11\bin\heat.exe" dir "..\..\artifacts" -o ModComponents.wxs -cg ModComponents -sfrag -gg -g1 -srd -sreg -var var.ImageTagWPF.TargetDir -dr INSTALLDIR -t $(Projectdir)Exclusions.xslt

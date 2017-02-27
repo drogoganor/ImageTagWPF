@@ -1,0 +1,11 @@
+/src/ImageTagWPF/obj
+/src/ImageTagWPF/bin
+*.user
+/artifacts/imagetag.db
+/artifacts/_LogLast.txt
+/artifacts/Settings.xml
+*.vshost.exe.config
+*.pdb
+*.suo
+/src/packages
+/src/ImageTagWPF/packages

@@ -1,0 +1,56 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ImageTagWPF.Controls.Forms"
+             xmlns:Controls="clr-namespace:ImageTagWPF.Controls" x:Class="ImageTagWPF.Controls.Forms.OperationsForm"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="700">
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" MaxWidth="180" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Button x:Name="OrganizeImagesButton"  Content="Auto Organize" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="160" Height="35" Click="OrganizeImagesButton_Click"/>
+            <Button x:Name="UpdateParentTagsButton" Content="Update Parent Tags" HorizontalAlignment="Left" Margin="10,329,0,0" VerticalAlignment="Top" Width="160" Height="35" Click="UpdateParentTagsButton_Click"/>
+            <Button x:Name="FindDuplicateFilesButton" Content="Consolidate Duplicates" HorizontalAlignment="Left" Margin="11,70,0,0" VerticalAlignment="Top" Width="160" Height="35" Click="ConsolidateDuplicateFilesButton_Click"/>
+            <Button x:Name="ReplaceDirButton" Content="Replace Path" HorizontalAlignment="Left" Margin="10,230,0,0" VerticalAlignment="Top" Width="160" Height="35" Click="ReplaceDirButton_Click"/>
+            <Label x:Name="label" Content="Search" HorizontalAlignment="Left" Margin="11,270,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="SearchDirTextBox" HorizontalAlignment="Left" Height="23" Margin="61,273,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="109"/>
+            <Label x:Name="label1"  Content="Replace" HorizontalAlignment="Left" Margin="10,298,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="ReplaceDirTextBox" HorizontalAlignment="Left" Height="23" Margin="61,301,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="109"/>
+            <CheckBox x:Name="IgnoreFilenameCheckbox" Content="Ignore Filename" HorizontalAlignment="Left" Margin="11,110,0,0" VerticalAlignment="Top" IsChecked="True"/>
+            <CheckBox x:Name="DeleteFileCheckbox" Content="Delete Duplicate Files" HorizontalAlignment="Left" Margin="11,130,0,0" VerticalAlignment="Top" IsChecked="True"/>
+            <CheckBox x:Name="SuppressSuccessMessagesCheckbox" Content="Suppress Success Messages" HorizontalAlignment="Left" Margin="11,50,0,0" VerticalAlignment="Top" IsChecked="True"/>
+            <Button x:Name="FindOrphansButton" Content="Find Orphaned Images" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top" Width="160" Height="35" Click="FindOrphansButton_Click"/>
+            <Button x:Name="ClearCopyDirectoriesButton" Content="Clear Copy Directories" HorizontalAlignment="Left" Margin="10,544,0,0" VerticalAlignment="Top" Width="160" Height="35" Click="ClearCopyDirectoriesButton_Click"/>
+            <Button x:Name="DelistDirectoryButton" Content="Delist Entire Directory" HorizontalAlignment="Left" Margin="10,369,0,0" VerticalAlignment="Top" Width="160" Height="35" Click="DelistDirectoryButton_Click"/>
+            <Label x:Name="label1_Copy"  Content="Dir" HorizontalAlignment="Left" Margin="22,408,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="DelistDirTextBox" HorizontalAlignment="Left" Height="23" Margin="61,409,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="109"/>
+            <Button x:Name="FindOrphanedRecordsButton" Content="Find Orphaned Records" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="160" Height="35" Click="FindOrphanedRecordsButton_Click"/>
+            <Button x:Name="ClearLogButton" Content="Clear Log" HorizontalAlignment="Left" Margin="10,584,0,0" VerticalAlignment="Top" Width="160" Height="35" Click="ClearLogButton_Click"/>
+            <Button x:Name="FindDupesByContentButton" Content="Find Dupes by Content" HorizontalAlignment="Left" Margin="11,439,0,0" VerticalAlignment="Top" Width="160" Height="35" Click="FindDupesByContentButton_Click"/>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <TabControl x:Name="TabControl" Margin="10,10,10,10"
+			HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TabItem Header="Log">
+                    <Grid>
+                        <Controls:AppenderTextBox x:Name="AppenderTextBox" HorizontalAlignment="Stretch" Margin="10,10,10,10" VerticalAlignment="Stretch"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Resolve">
+                    <Grid>
+                        <Controls:ProcessOutputReportControl x:Name="OutputReportControl" />
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+    </Grid>
+</UserControl>

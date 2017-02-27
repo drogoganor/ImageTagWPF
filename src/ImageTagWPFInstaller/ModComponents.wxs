@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="INSTALLDIR">
+            <Component Id="cmp483D73B67E63BED35D703D2CB12FA1C8" Guid="8858E57E-1412-4C3D-928D-7C3AECCB70CF">
+                <File Id="fil55B351A3EC028DEC631A391B699BE789" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\ColorPickerWPF.dll" />
+            </Component>
+            <Component Id="cmpD4894193BCD88F6339AF712BA02A4C4B" Guid="9FEDD582-1803-44D5-B31B-7151ED8B6CB1">
+                <File Id="fil3A795EBC412B33A14DA44BC843481BFD" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\EntityFramework.dll" />
+            </Component>
+            <Component Id="cmp1C4889EB836095E6C0EEC7F98E5762F1" Guid="6F8B4C68-E081-4D6C-BCC7-7E6641DB0D69">
+                <File Id="fil06E616908019B1062DC24B7A89F8DBE9" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\EntityFramework.SqlServer.dll" />
+            </Component>
+            <Component Id="cmp0D7A65347893916D0054D67DE6CAB677" Guid="696AF7F3-A0EA-4C45-8336-FBBE672F3AC8">
+                <File Id="fil041E865345FA352EDE936956A4112F67" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\ImageTagWPF.exe" />
+            </Component>
+            <Component Id="cmpC959FB2C001F93A0B24C00004E63B720" Guid="1E52F73B-CC9A-4E72-9377-E1FD3DDF8D59">
+                <File Id="fil3A93D9D53F5C82354C4704EF2B38E934" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\ImageTagWPF.exe.config" />
+            </Component>
+            <Component Id="cmp13D6573EA8CF3F99F44BAE837E2771F0" Guid="80AB5B85-922D-46F0-9310-C0ACA741E9B7">
+                <File Id="fil2991F53D601CDF7142D0A9E1B42E116E" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\log4net.dll" />
+            </Component>
+            <Component Id="cmpE3589B7872EF43FE27AA570190B85C5D" Guid="8264B4F8-BBA5-4970-9CBC-B0D1BEC2CE91">
+                <File Id="fil5AEB724A1F965DB746FC495B13C899D7" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\System.Data.SQLite.dll" />
+            </Component>
+            <Component Id="cmpB53EB172A98CF82E578800D57CA85027" Guid="AD61BEB4-EC5C-406B-8641-09347E7D6EAD">
+                <File Id="filFB705122D011204E81591754BBB60D4C" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\System.Data.SQLite.EF6.dll" />
+            </Component>
+            <Component Id="cmp2BF7F04208F369F918B6DC592B3CF1C7" Guid="52143667-24C7-47AA-A888-D1E710A4C697">
+                <File Id="fil8E294A00F511E8CA221C68272694E579" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\System.Data.SQLite.Linq.dll" />
+            </Component>
+            <Component Id="cmp89B2E76DCF269974386007B03C04CB54" Guid="28FDFFF0-DE15-4DCC-8393-D3BC5867F4E6">
+                <File Id="fil301714557ABF12E6D964E7554E7C6355" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\WriteableBitmapEx.Wpf.dll" />
+            </Component>
+            <Directory Id="dir2AFC18257B33E896219016CCEB7EA4A6" Name="x64">
+                <Component Id="cmp4CCEEE88887726891EF239D4E643E6A5" Guid="E5F34325-EA9F-40FA-9913-6877A9868280">
+                    <File Id="filD856DC1B81D368EE3C80043423379C1C" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\x64\SQLite.Interop.dll" />
+                </Component>
+            </Directory>
+            <Directory Id="dir8E3BA29C16757B8261AAD8A209523F72" Name="x86">
+                <Component Id="cmpD8BDCE1A52677331EDF232C7394ED630" Guid="DE6DFB4D-3CE5-49DD-B66C-EE9DCE40A664">
+                    <File Id="filACCE4BE4D324F4DBBF69D1A26D9035DE" KeyPath="yes" Source="$(var.ImageTagWPF.TargetDir)\x86\SQLite.Interop.dll" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ModComponents">
+            <ComponentRef Id="cmp483D73B67E63BED35D703D2CB12FA1C8" />
+            <ComponentRef Id="cmpD4894193BCD88F6339AF712BA02A4C4B" />
+            <ComponentRef Id="cmp1C4889EB836095E6C0EEC7F98E5762F1" />
+            <ComponentRef Id="cmp0D7A65347893916D0054D67DE6CAB677" />
+            <ComponentRef Id="cmpC959FB2C001F93A0B24C00004E63B720" />
+            <ComponentRef Id="cmp13D6573EA8CF3F99F44BAE837E2771F0" />
+            <ComponentRef Id="cmpE3589B7872EF43FE27AA570190B85C5D" />
+            <ComponentRef Id="cmpB53EB172A98CF82E578800D57CA85027" />
+            <ComponentRef Id="cmp2BF7F04208F369F918B6DC592B3CF1C7" />
+            <ComponentRef Id="cmp89B2E76DCF269974386007B03C04CB54" />
+            <ComponentRef Id="cmp4CCEEE88887726891EF239D4E643E6A5" />
+            <ComponentRef Id="cmpD8BDCE1A52677331EDF232C7394ED630" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

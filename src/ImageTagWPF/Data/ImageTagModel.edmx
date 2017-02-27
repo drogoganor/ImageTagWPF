@@ -1,0 +1,395 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ImageTagModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="data source=D:\Development\ImageTagWPF\artifacts\imagetag.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Image">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Path" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Checksum" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Rating" Type="integer" />
+          <Property Name="Explicit" Type="integer" />
+        </EntityType>
+        <EntityType Name="ImageTag">
+          <Key>
+            <PropertyRef Name="ImageID" />
+            <PropertyRef Name="TagID" />
+          </Key>
+          <Property Name="ImageID" Type="integer" Nullable="false" />
+          <Property Name="TagID" Type="integer" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrganizeDirectory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Rating" Type="integer" />
+          <Property Name="Description" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="ForeColor" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="BackColor" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="IgnoreParent" Type="integer" Nullable="false" />
+          <Property Name="OrTags" Type="integer" Nullable="false" />
+          <Property Name="CopyOnly" Type="integer" Nullable="false" />
+          <Property Name="TheseTagsOnly" Type="integer" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrganizeDirectoryDirectory">
+          <Key>
+            <PropertyRef Name="ParentDirectoryID" />
+            <PropertyRef Name="ChildDirectoryID" />
+          </Key>
+          <Property Name="ParentDirectoryID" Type="integer" Nullable="false" />
+          <Property Name="ChildDirectoryID" Type="integer" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrganizeDirectoryTags">
+          <Key>
+            <PropertyRef Name="DirectoryID" />
+            <PropertyRef Name="TagID" />
+          </Key>
+          <Property Name="DirectoryID" Type="integer" Nullable="false" />
+          <Property Name="TagID" Type="integer" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="TagType" Type="integer" Nullable="false" />
+          <Property Name="LastUsed" Type="datetime" />
+        </EntityType>
+        <EntityType Name="TagParent">
+          <Key>
+            <PropertyRef Name="ParentID" />
+            <PropertyRef Name="ChildID" />
+          </Key>
+          <Property Name="ParentID" Type="integer" Nullable="false" />
+          <Property Name="ChildID" Type="integer" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ImageTag_0_0">
+          <End Role="Tag" Type="Self.Tag" Multiplicity="1" />
+          <End Role="ImageTag" Type="Self.ImageTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ImageTag">
+              <PropertyRef Name="TagID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ImageTag_1_0">
+          <End Role="Image" Type="Self.Image" Multiplicity="1" />
+          <End Role="ImageTag" Type="Self.ImageTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Image">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ImageTag">
+              <PropertyRef Name="ImageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizeDirectoryDirectory_0_0">
+          <End Role="OrganizeDirectory" Type="Self.OrganizeDirectory" Multiplicity="1" />
+          <End Role="OrganizeDirectoryDirectory" Type="Self.OrganizeDirectoryDirectory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrganizeDirectory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrganizeDirectoryDirectory">
+              <PropertyRef Name="ChildDirectoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizeDirectoryDirectory_1_0">
+          <End Role="OrganizeDirectory" Type="Self.OrganizeDirectory" Multiplicity="1" />
+          <End Role="OrganizeDirectoryDirectory" Type="Self.OrganizeDirectoryDirectory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrganizeDirectory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrganizeDirectoryDirectory">
+              <PropertyRef Name="ParentDirectoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizeDirectoryTags_0_0">
+          <End Role="Tag" Type="Self.Tag" Multiplicity="1" />
+          <End Role="OrganizeDirectoryTags" Type="Self.OrganizeDirectoryTags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrganizeDirectoryTags">
+              <PropertyRef Name="TagID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizeDirectoryTags_1_0">
+          <End Role="OrganizeDirectory" Type="Self.OrganizeDirectory" Multiplicity="1" />
+          <End Role="OrganizeDirectoryTags" Type="Self.OrganizeDirectoryTags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrganizeDirectory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrganizeDirectoryTags">
+              <PropertyRef Name="DirectoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TagParent_0_0">
+          <End Role="Tag" Type="Self.Tag" Multiplicity="1" />
+          <End Role="TagParent" Type="Self.TagParent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TagParent">
+              <PropertyRef Name="ChildID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TagParent_1_0">
+          <End Role="Tag" Type="Self.Tag" Multiplicity="1" />
+          <End Role="TagParent" Type="Self.TagParent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TagParent">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ImageTagModelStoreContainer">
+          <EntitySet Name="Image" EntityType="Self.Image" store:Type="Tables" />
+          <EntitySet Name="ImageTag" EntityType="Self.ImageTag" store:Type="Tables" />
+          <EntitySet Name="OrganizeDirectory" EntityType="Self.OrganizeDirectory" store:Type="Tables" />
+          <EntitySet Name="OrganizeDirectoryDirectory" EntityType="Self.OrganizeDirectoryDirectory" store:Type="Tables" />
+          <EntitySet Name="OrganizeDirectoryTags" EntityType="Self.OrganizeDirectoryTags" store:Type="Tables" />
+          <EntitySet Name="Tag" EntityType="Self.Tag" store:Type="Tables" />
+          <EntitySet Name="TagParent" EntityType="Self.TagParent" store:Type="Tables" />
+          <AssociationSet Name="FK_ImageTag_0_0" Association="Self.FK_ImageTag_0_0">
+            <End Role="Tag" EntitySet="Tag" />
+            <End Role="ImageTag" EntitySet="ImageTag" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ImageTag_1_0" Association="Self.FK_ImageTag_1_0">
+            <End Role="Image" EntitySet="Image" />
+            <End Role="ImageTag" EntitySet="ImageTag" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizeDirectoryDirectory_0_0" Association="Self.FK_OrganizeDirectoryDirectory_0_0">
+            <End Role="OrganizeDirectory" EntitySet="OrganizeDirectory" />
+            <End Role="OrganizeDirectoryDirectory" EntitySet="OrganizeDirectoryDirectory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizeDirectoryDirectory_1_0" Association="Self.FK_OrganizeDirectoryDirectory_1_0">
+            <End Role="OrganizeDirectory" EntitySet="OrganizeDirectory" />
+            <End Role="OrganizeDirectoryDirectory" EntitySet="OrganizeDirectoryDirectory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizeDirectoryTags_0_0" Association="Self.FK_OrganizeDirectoryTags_0_0">
+            <End Role="Tag" EntitySet="Tag" />
+            <End Role="OrganizeDirectoryTags" EntitySet="OrganizeDirectoryTags" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizeDirectoryTags_1_0" Association="Self.FK_OrganizeDirectoryTags_1_0">
+            <End Role="OrganizeDirectory" EntitySet="OrganizeDirectory" />
+            <End Role="OrganizeDirectoryTags" EntitySet="OrganizeDirectoryTags" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TagParent_0_0" Association="Self.FK_TagParent_0_0">
+            <End Role="Tag" EntitySet="Tag" />
+            <End Role="TagParent" EntitySet="TagParent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TagParent_1_0" Association="Self.FK_TagParent_1_0">
+            <End Role="Tag" EntitySet="Tag" />
+            <End Role="TagParent" EntitySet="TagParent" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ImageTagModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ImageTagEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Images" EntityType="ImageTagModel.Image" />
+          <EntitySet Name="Tags" EntityType="ImageTagModel.Tag" />
+          <AssociationSet Name="ImageTag" Association="ImageTagModel.ImageTag">
+            <End Role="Tag" EntitySet="Tags" />
+            <End Role="Image" EntitySet="Images" />
+          </AssociationSet>
+          <AssociationSet Name="TagParent" Association="ImageTagModel.TagParent">
+            <End Role="Tag" EntitySet="Tags" />
+            <End Role="Tag1" EntitySet="Tags" />
+          </AssociationSet>
+          <EntitySet Name="OrganizeDirectories" EntityType="ImageTagModel.OrganizeDirectory" />
+          <AssociationSet Name="OrganizeDirectoryDirectory" Association="ImageTagModel.OrganizeDirectoryDirectory">
+            <End Role="OrganizeDirectory" EntitySet="OrganizeDirectories" />
+            <End Role="OrganizeDirectory1" EntitySet="OrganizeDirectories" />
+          </AssociationSet>
+          <AssociationSet Name="OrganizeDirectoryTags" Association="ImageTagModel.OrganizeDirectoryTags">
+            <End Role="Tag" EntitySet="Tags" />
+            <End Role="OrganizeDirectory" EntitySet="OrganizeDirectories" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Image">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Path" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Checksum" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Rating" Type="Int64" />
+          <NavigationProperty Name="Tags" Relationship="ImageTagModel.ImageTag" FromRole="Image" ToRole="Tag" />
+          <Property Name="Explicit" Type="Int64" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="TagType" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Images" Relationship="ImageTagModel.ImageTag" FromRole="Tag" ToRole="Image" />
+          <Property Name="LastUsed" Type="DateTime" />
+          <NavigationProperty Name="ParentTags" Relationship="ImageTagModel.TagParent" FromRole="Tag" ToRole="Tag1" />
+          <NavigationProperty Name="ChildTags" Relationship="ImageTagModel.TagParent" FromRole="Tag1" ToRole="Tag" />
+          <NavigationProperty Name="OrganizeDirectories" Relationship="ImageTagModel.OrganizeDirectoryTags" FromRole="Tag" ToRole="OrganizeDirectory" />
+        </EntityType>
+        <Association Name="ImageTag">
+          <End Type="ImageTagModel.Tag" Role="Tag" Multiplicity="*" />
+          <End Type="ImageTagModel.Image" Role="Image" Multiplicity="*" />
+        </Association>
+        <Association Name="TagParent">
+          <End Type="ImageTagModel.Tag" Role="Tag" Multiplicity="*" />
+          <End Type="ImageTagModel.Tag" Role="Tag1" Multiplicity="*" />
+        </Association>
+        <EntityType Name="OrganizeDirectory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="IgnoreParent" Type="Int64" Nullable="false" />
+          <Property Name="OrTags" Type="Int64" Nullable="false" />
+          <Property Name="CopyOnly" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="ParentDirectories" Relationship="ImageTagModel.OrganizeDirectoryDirectory" FromRole="OrganizeDirectory" ToRole="OrganizeDirectory1" />
+          <NavigationProperty Name="ChildDirectories" Relationship="ImageTagModel.OrganizeDirectoryDirectory" FromRole="OrganizeDirectory1" ToRole="OrganizeDirectory" />
+          <NavigationProperty Name="Tags" Relationship="ImageTagModel.OrganizeDirectoryTags" FromRole="OrganizeDirectory" ToRole="Tag" />
+          <Property Name="Rating" Type="Int64" />
+          <Property Name="Description" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="ForeColor" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="BackColor" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="TheseTagsOnly" Type="Int64" Nullable="false" />
+        </EntityType>
+        <Association Name="OrganizeDirectoryDirectory">
+          <End Type="ImageTagModel.OrganizeDirectory" Role="OrganizeDirectory" Multiplicity="*" />
+          <End Type="ImageTagModel.OrganizeDirectory" Role="OrganizeDirectory1" Multiplicity="*" />
+        </Association>
+        <Association Name="OrganizeDirectoryTags">
+          <End Type="ImageTagModel.Tag" Role="Tag" Multiplicity="*" />
+          <End Type="ImageTagModel.OrganizeDirectory" Role="OrganizeDirectory" Multiplicity="*" />
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ImageTagModelStoreContainer" CdmEntityContainer="ImageTagEntities">
+          <EntitySetMapping Name="Images">
+            <EntityTypeMapping TypeName="ImageTagModel.Image">
+              <MappingFragment StoreEntitySet="Image">
+                <ScalarProperty Name="Explicit" ColumnName="Explicit" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="Checksum" ColumnName="Checksum" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tags">
+            <EntityTypeMapping TypeName="ImageTagModel.Tag">
+              <MappingFragment StoreEntitySet="Tag">
+                <ScalarProperty Name="LastUsed" ColumnName="LastUsed" />
+                <ScalarProperty Name="TagType" ColumnName="TagType" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ImageTag" TypeName="ImageTagModel.ImageTag" StoreEntitySet="ImageTag">
+            <EndProperty Name="Image">
+              <ScalarProperty Name="ID" ColumnName="ImageID" />
+            </EndProperty>
+            <EndProperty Name="Tag">
+              <ScalarProperty Name="ID" ColumnName="TagID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="TagParent" TypeName="ImageTagModel.TagParent" StoreEntitySet="TagParent">
+            <EndProperty Name="Tag1">
+              <ScalarProperty Name="ID" ColumnName="ParentID" />
+            </EndProperty>
+            <EndProperty Name="Tag">
+              <ScalarProperty Name="ID" ColumnName="ChildID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="OrganizeDirectories">
+            <EntityTypeMapping TypeName="ImageTagModel.OrganizeDirectory">
+              <MappingFragment StoreEntitySet="OrganizeDirectory">
+                <ScalarProperty Name="TheseTagsOnly" ColumnName="TheseTagsOnly" />
+                <ScalarProperty Name="BackColor" ColumnName="BackColor" />
+                <ScalarProperty Name="ForeColor" ColumnName="ForeColor" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="CopyOnly" ColumnName="CopyOnly" />
+                <ScalarProperty Name="OrTags" ColumnName="OrTags" />
+                <ScalarProperty Name="IgnoreParent" ColumnName="IgnoreParent" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="OrganizeDirectoryDirectory" TypeName="ImageTagModel.OrganizeDirectoryDirectory" StoreEntitySet="OrganizeDirectoryDirectory">
+            <EndProperty Name="OrganizeDirectory1">
+              <ScalarProperty Name="ID" ColumnName="ParentDirectoryID" />
+            </EndProperty>
+            <EndProperty Name="OrganizeDirectory">
+              <ScalarProperty Name="ID" ColumnName="ChildDirectoryID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="OrganizeDirectoryTags" TypeName="ImageTagModel.OrganizeDirectoryTags" StoreEntitySet="OrganizeDirectoryTags">
+            <EndProperty Name="OrganizeDirectory">
+              <ScalarProperty Name="ID" ColumnName="DirectoryID" />
+            </EndProperty>
+            <EndProperty Name="Tag">
+              <ScalarProperty Name="ID" ColumnName="TagID" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
