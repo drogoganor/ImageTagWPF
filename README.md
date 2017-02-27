@@ -84,7 +84,7 @@ Select the "Process" tab to organize your images according to your Output Folder
 On this tab you can select from several operations:
 
 * Auto Organize
-..* Move images into your Output Folders as necessary.
+--* Move images into your Output Folders as necessary.
 * Consolidate Duplicates
 ..* Find identical files by checksum and consolidate into a single record. Uncheck Ignore Filename to require both the filename and checksum be identical.
 * Find Orphaned Records
