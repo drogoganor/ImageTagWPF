@@ -64,10 +64,14 @@ Then, add child nodes by selecting the root node, entering details, then Add New
 
 Each node can have a set of tags and/or a minimum rating that determines what files will be moved into it. There are a number of options:
 
-* Ignore Parent Tags: Just find images with the current tags. Unchecking this will also filter by the cumulative parent tags.
-* "Or" Search Terms: Match images with any of the tags specified. Unchecked requires images to have all of the tags.
-* Copy Only: Make a copy of matching images and place them in this directory. These images will be untracked.
-* These Tags Only: Match images that only have these tags, and none other.
+* Ignore Parent Tags
+..* Just find images with the current tags. Unchecking this will also filter by the cumulative parent tags.
+* "Or" Search Terms
+..* Match images with any of the tags specified. Unchecked requires images to have all of the tags.
+* Copy Only
+..* Make a copy of matching images and place them in this directory. These images will be untracked.
+* These Tags Only
+..* Match images that only have these tags, and none other.
 
 **Warning: Setting a node to "Copy Only" will permit the application to delete the contents of this directory when doing an Auto Organize.**
 
@@ -79,16 +83,26 @@ Select the "Process" tab to organize your images according to your Output Folder
 
 On this tab you can select from several operations:
 
-* Auto Organize: Move images into your Output Folders as necessary.
-* Consolidate Duplicates: Find identical files by checksum and consolidate into a single record. Uncheck Ignore Filename to require both the filename and checksum be identical.
-* Find Orphaned Records: Find records where the image couldn't be found on disk. Should auto-resolve if an identical image is found in your tagged images directory.
-* Find Orphaned Images: Find images in your tagged directory that aren't being tracked in the database.
-* Replace Path: Replace image paths in the database. Good to use if you moved your images directory. Enter the old directory in Search and the new directory in Replace.
-* Update Parent Tags: Go through tags of all tagged images and apply any parent tags that might be missing.
-* Delist Entire Directory: Remove from the database all image records that have a path starting with the Dir value.
-* Find Dupes By Content: Extremely slow and experimental process to identify duplicate images with the same resolution, but different filesize/checksums. You would be well advised to use a specialized image duplicate finder application instead of this.
-* Clear Copy Directories: Deletes all files from folders in Output Folders that have "Copy Only" set to true.
-* Clear Log: Clears the log window.
+* Auto Organize
+..* Move images into your Output Folders as necessary.
+* Consolidate Duplicates
+..* Find identical files by checksum and consolidate into a single record. Uncheck Ignore Filename to require both the filename and checksum be identical.
+* Find Orphaned Records
+..* Find records where the image couldn't be found on disk. Should auto-resolve if an identical image is found in your tagged images directory.
+* Find Orphaned Images
+..* Find images in your tagged directory that aren't being tracked in the database.
+* Replace Path
+..* Replace image paths in the database. Good to use if you moved your images directory. Enter the old directory in Search and the new directory in Replace.
+* Update Parent Tags
+..* Go through tags of all tagged images and apply any parent tags that might be missing.
+* Delist Entire Directory
+..* Remove from the database all image records that have a path starting with the Dir value.
+* Find Dupes By Content
+..* Extremely slow and experimental process to identify duplicate images with the same resolution, but different filesize/checksums. You would be well advised to use a specialized image duplicate finder application instead of this.
+* Clear Copy Directories
+..* Deletes all files from folders in Output Folders that have "Copy Only" set to true.
+* Clear Log
+..* Clears the log window.
 
 Some operations won't resolve conflicts automatically, so you might need to proceed to the "Resolve" tab. Here you can select a conflict item, then click the Resolve Issue button to try and solve the conflict. For a duplicate file, you will be prompted to select which file to keep.
 
