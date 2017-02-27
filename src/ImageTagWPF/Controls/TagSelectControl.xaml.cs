@@ -81,14 +81,16 @@ namespace ImageTagWPF.Controls
         {
             // Filter by category
             if (!DescriptorCheckBox.IsChecked.Value ||
-                !CharacterCheckBox.IsChecked.Value ||
+                !SubjectCheckBox.IsChecked.Value ||
+                !EventCheckBox.IsChecked.Value ||
                 !SeriesCheckBox.IsChecked.Value ||
                 !ArtistCheckBox.IsChecked.Value)
             {
                 tags = tags
                     .Where(x =>
                             (TagType)x.Tag.TagType == TagType.Descriptor && DescriptorCheckBox.IsChecked.Value ||
-                            (TagType)x.Tag.TagType == TagType.Character && CharacterCheckBox.IsChecked.Value ||
+                            (TagType)x.Tag.TagType == TagType.Subject && SubjectCheckBox.IsChecked.Value ||
+                            (TagType)x.Tag.TagType == TagType.Event && EventCheckBox.IsChecked.Value ||
                             (TagType)x.Tag.TagType == TagType.Series && SeriesCheckBox.IsChecked.Value ||
                             (TagType)x.Tag.TagType == TagType.Artist && ArtistCheckBox.IsChecked.Value
                     );

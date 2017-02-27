@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ImageTagWPF.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="600">
+             d:DesignHeight="250" d:DesignWidth="660">
     <UserControl.Resources>
         <Style x:Key="_ListBoxItemStyle" TargetType="ListBoxItem">
             <Setter Property="Template">
@@ -32,8 +32,8 @@
     </UserControl.Resources>
 
     <Grid>
-        
-        
+
+
         <Grid.RowDefinitions>
             <RowDefinition Height="28" />
             <RowDefinition Height="4*" />
@@ -59,12 +59,14 @@
             <Grid Grid.Column="1">
                 <CheckBox x:Name="DescriptorCheckBox" IsChecked="True" Content="Descriptor" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" Width="75" Height="23"
                           Checked="CheckBox_OnChanged" Unchecked="CheckBox_OnChanged" />
-                <CheckBox x:Name="CharacterCheckBox" IsChecked="True" Content="Character" HorizontalAlignment="Left" Margin="95,8,0,0" VerticalAlignment="Top" Width="75" Height="23"
+                <CheckBox x:Name="SubjectCheckBox" IsChecked="True" Content="Subject" HorizontalAlignment="Left" Margin="95,8,0,-3" VerticalAlignment="Top" Width="61" Height="23"
                           Checked="CheckBox_OnChanged" Unchecked="CheckBox_OnChanged" />
-                <CheckBox x:Name="SeriesCheckBox" IsChecked="True" Content="Series" HorizontalAlignment="Left" Margin="175,8,0,0" VerticalAlignment="Top" Width="58" Height="23"
+                <CheckBox x:Name="SeriesCheckBox" IsChecked="True" Content="Series" HorizontalAlignment="Left" Margin="216,8,0,-3" VerticalAlignment="Top" Width="58" Height="23"
                           Checked="CheckBox_OnChanged" Unchecked="CheckBox_OnChanged" />
-                <CheckBox x:Name="ArtistCheckBox" IsChecked="True" Content="Artist" HorizontalAlignment="Left" Margin="238,8,0,0" VerticalAlignment="Top" Width="55" Height="23"
+                <CheckBox x:Name="ArtistCheckBox" IsChecked="True" Content="Artist" HorizontalAlignment="Left" Margin="279,8,0,-3" VerticalAlignment="Top" Width="55" Height="23"
                           Checked="CheckBox_OnChanged" Unchecked="CheckBox_OnChanged" />
+                <CheckBox x:Name="EventCheckBox" IsChecked="True" Content="Event" HorizontalAlignment="Left" Margin="161,8,0,-3" VerticalAlignment="Top" Width="50" Height="23"
+                	Checked="CheckBox_OnChanged" Unchecked="CheckBox_OnChanged" />
 
             </Grid>
 
@@ -74,7 +76,7 @@
                     Margin="10,4,10,4">
             <TabItem Header="All">
                 <Grid>
-                    
+
                     <ListBox x:Name="TagViewer"  SelectionMode="Multiple"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 SelectionChanged="TagViewer_SelectionChanged" 
@@ -94,11 +96,11 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    
-                    
+
+
                 </Grid>
             </TabItem>
-            
+
             <TabItem Header="Recent">
                 <Grid>
 
@@ -134,6 +136,6 @@
                                      OnRatingChanged="RatingControl_OnOnRatingChanged"/>
 
         </Grid>
-        
+
     </Grid>
 </UserControl>

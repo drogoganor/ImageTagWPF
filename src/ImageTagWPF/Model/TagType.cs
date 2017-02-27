@@ -9,7 +9,8 @@ namespace ImageTagWPF.Model
     public enum TagType
     {
         Descriptor,
-        Character,
+        Subject,
+        Event,
         Series,
         Artist,
     }

@@ -77,7 +77,7 @@ namespace ImageTagWPF.Code
             {
                 case TagType.Descriptor:
                     return Colors.Black;
-                case TagType.Character:
+                case TagType.Subject:
                     return Colors.DarkOrange;
                 case TagType.Artist:
                     return Colors.MediumPurple;

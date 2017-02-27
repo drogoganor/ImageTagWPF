@@ -42,8 +42,13 @@ namespace ImageTagWPF.Code
             });
             TagCategoryColors.Add(new TagCategoryColor()
             {
-                TagType = TagType.Character,
+                TagType = TagType.Subject,
                 FontColor = Colors.DarkOrange
+            });
+            TagCategoryColors.Add(new TagCategoryColor()
+            {
+                TagType = TagType.Event,
+                FontColor = Colors.Blue,
             });
             TagCategoryColors.Add(new TagCategoryColor()
             {
