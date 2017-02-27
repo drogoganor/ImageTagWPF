@@ -4,7 +4,7 @@ A simple, portable image tagger written in WPF for .NET 4.6.1. Uses a local SQLi
 
 It requires read/write permissions in the folder it is run from.
 
-Warning: This is an amateur effort - make a backup of your images if you use them with this program!
+**Warning: This is an amateur effort - make a backup of your images if you use them with this program!**
 
 Please note there are known performance problems with some of the bulk image processing operations.
 
@@ -22,7 +22,7 @@ You can explore the folder tree by clicking a folder name on the left pane. Imag
 
 Select an image (or multiple images with ctrl+click or shift+click), then select a tag from the list of tags (top). You can select more than one tag. Tags will be applied to all selected images.
 
-Please note that tagging a lot of images takes time. You can see which tagging processes are running at the bottom of the window.
+**Please note that tagging a lot of images takes time.** You can see which tagging processes are running at the bottom of the window.
 
 ### Image Explore
 
@@ -34,7 +34,9 @@ Select tags from the top right to add them to your search. You can optionally sp
 
 Press search to return images matching your search terms.
 
-If you want to change the tags or rating of a selected image, you can check the Edit Mode checkbox, then select tags and/or rating. Changes will be saved immediately. You must uncheck Edit Mode to search again. (Warning: There is a known bug using Edit Mode while a process operation is underway - the app will crash.)
+If you want to change the tags or rating of a selected image, you can check the Edit Mode checkbox, then select tags and/or rating. Changes will be saved immediately. You must uncheck Edit Mode to search again. 
+
+**Warning: There is a known bug using Edit Mode while a process operation is underway - the app will crash.**
 
 You can drag and drop selected images from this window into other applications or windows. Alternatively, you can drag and drop selected images by dragging one of the grey "Drag Copy" panels at the top right.
 
@@ -67,7 +69,7 @@ Each node can have a set of tags and/or a minimum rating that determines what fi
 * Copy Only: Make a copy of matching images and place them in this directory. These images will be untracked.
 * These Tags Only: Match images that only have these tags, and none other.
 
-Warning: Setting a node to "Copy Only" will permit the application to delete the contents of this directory when doing an Auto Organize.
+**Warning: Setting a node to "Copy Only" will permit the application to delete the contents of this directory when doing an Auto Organize.**
 
 ### Process
 
