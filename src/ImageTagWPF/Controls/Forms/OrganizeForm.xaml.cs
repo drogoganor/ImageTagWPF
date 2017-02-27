@@ -307,9 +307,13 @@ namespace ImageTagWPF.Controls.Forms
                         if (childDir.ID == selectedItem.ID)
                         {
                             if (up)
+                            {
                                 ourIndex--;
-                            //else
-                            //    ourIndex++;
+                            }
+                            else
+                            {
+                                ourIndex++;
+                            }
                             break;
                         }
                         ourIndex++;
@@ -323,11 +327,58 @@ namespace ImageTagWPF.Controls.Forms
 
                     var list = parentDir.ChildDirectories.ToList();
 
-                    list.Remove(selectedItem);
+                    var newItem = list[ourIndex];
 
-                    list.Insert(ourIndex, selectedItem);
+
+                    // Swap 
+                    var tempDir = new OrganizeDirectory()
+                    {
+                        BackColor = newItem.BackColor,
+                        ChildDirectories = newItem.ChildDirectories.ToList(),
+                        Tags = newItem.Tags.ToList(),
+                        Name = newItem.Name,
+                        IgnoreParent = newItem.IgnoreParent,
+                        OrTags = newItem.OrTags,
+                        CopyOnly = newItem.CopyOnly,
+                        Rating = newItem.Rating,
+                        Description = newItem.Description,
+                        ForeColor = newItem.ForeColor,
+                        TheseTagsOnly = newItem.TheseTagsOnly
+                    };
+
+                    newItem.BackColor = selectedItem.BackColor;
+                    newItem.ForeColor = selectedItem.ForeColor;
+                    newItem.ChildDirectories = selectedItem.ChildDirectories.ToList();
+                    newItem.Tags = selectedItem.Tags.ToList();
+                    newItem.Name = selectedItem.Name;
+                    newItem.IgnoreParent = selectedItem.IgnoreParent;
+                    newItem.OrTags = selectedItem.OrTags;
+                    newItem.CopyOnly = selectedItem.CopyOnly;
+                    newItem.Rating = selectedItem.Rating;
+                    newItem.Description = selectedItem.Description;
+                    newItem.TheseTagsOnly = selectedItem.TheseTagsOnly;
+
+
+                    selectedItem.BackColor = tempDir.BackColor;
+                    selectedItem.ForeColor = tempDir.ForeColor;
+                    selectedItem.ChildDirectories = tempDir.ChildDirectories.ToList();
+                    selectedItem.Tags = tempDir.Tags.ToList();
+                    selectedItem.Name = tempDir.Name;
+                    selectedItem.IgnoreParent = tempDir.IgnoreParent;
+                    selectedItem.OrTags = tempDir.OrTags;
+                    selectedItem.CopyOnly = tempDir.CopyOnly;
+                    selectedItem.Rating = tempDir.Rating;
+                    selectedItem.Description = tempDir.Description;
+                    selectedItem.TheseTagsOnly = tempDir.TheseTagsOnly;
+                    
+
 
                     parentDir.ChildDirectories = list;
+
+
+                    OrganizeTree.FileTree.SelectItem(newItem);
+
+
                 }
 
             }
