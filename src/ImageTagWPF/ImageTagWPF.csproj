@@ -36,6 +36,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ColorPickerWPF, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ColorPickerWPF.1.0.6\lib\net461\ColorPickerWPF.dll</HintPath>
@@ -323,6 +326,8 @@
       <LastGenOutput>ImageTagModel.cs</LastGenOutput>
     </Content>
     <Resource Include="Resources\icon.png" />
+    <Resource Include="Resources\icon.ico" />
+    <Resource Include="icon.ico" />
     <Content Include="Settings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
