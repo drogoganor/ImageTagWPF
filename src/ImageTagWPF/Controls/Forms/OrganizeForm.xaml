@@ -11,8 +11,8 @@
     <Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" MaxWidth="280" />
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="345" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="220" MinHeight="140" />
@@ -21,7 +21,8 @@
 
 
         <controls:OrganizeTree x:Name="OrganizeTree" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-			OnPickNode="OrganizeTree_OnOnPickNode" OnNodeMoveUp="OrganizeTree_OnOnNodeMoveUp" OnNodeMoveDown="OrganizeTree_OnOnNodeMoveDown"/>
+			OnPickNode="OrganizeTree_OnOnPickNode" OnNodeMoveUp="OrganizeTree_OnOnNodeMoveUp" OnNodeMoveDown="OrganizeTree_OnOnNodeMoveDown"
+                               OnNodeMoveTop="OrganizeTree_OnOnNodeMoveTop" OnNodeMoveBottom="OrganizeTree_OnOnNodeMoveBottom"/>
 
         <Grid Grid.Column="1" Grid.RowSpan="2">
             <Label x:Name="label" Content="Name" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.053,-0.192"/>
@@ -54,8 +55,8 @@
             </ListBox>
 
 
-            <controls:TagSelectControl x:Name="TagSelectControl" HorizontalAlignment="Left" Margin="10,221,0,0" VerticalAlignment="Top" Height="202"
-                                       Background="LightGray"
+            <controls:TagSelectControl x:Name="TagSelectControl" BorderBrush="Gray" BorderThickness="1" HorizontalAlignment="Left" Margin="10,221,0,0" VerticalAlignment="Top" Height="202"
+                                       Background="GhostWhite"
 				OnSelectionChanged="TagSelectControl_OnOnSelectionChanged"
 				OnTagAdd="TagSelectControl_OnOnTagAdd"
 				OnRatingChanged="TagSelectControl_OnOnRatingChanged" Width="600"/>

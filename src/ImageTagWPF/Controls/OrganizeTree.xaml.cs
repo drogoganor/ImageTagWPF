@@ -28,6 +28,8 @@ namespace ImageTagWPF.Controls
         public event OrganizeTreeNodePickHandler OnPickNode;
         public event OrganizeTreeNodeMoveHandler OnNodeMoveUp;
         public event OrganizeTreeNodeMoveHandler OnNodeMoveDown;
+        public event OrganizeTreeNodeMoveHandler OnNodeMoveTop;
+        public event OrganizeTreeNodeMoveHandler OnNodeMoveBottom;
 
         public OrganizeTree()
         {
@@ -57,6 +59,16 @@ namespace ImageTagWPF.Controls
         private void MoveDownButton_Click(object sender, RoutedEventArgs e)
         {
             OnNodeMoveDown?.Invoke();
+        }
+
+        private void MoveToTopButton_Click(object sender, RoutedEventArgs e)
+        {
+            OnNodeMoveTop?.Invoke();
+        }
+
+        private void MoveToBottomButton_Click(object sender, RoutedEventArgs e)
+        {
+            OnNodeMoveBottom?.Invoke();
         }
     }
 }

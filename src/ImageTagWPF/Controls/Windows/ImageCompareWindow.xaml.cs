@@ -19,12 +19,9 @@ namespace ImageTagWPF.Controls.Windows
     /// </summary>
     public partial class ImageCompareWindow : Window
     {
-        public delegate void ImageComparePickHandler(string result);
-        
-        public event ImageComparePickHandler OnPick;
-
-        protected static string ResultImage = string.Empty;
+        protected string ResultImage = string.Empty;
         protected bool KeepBoth = false;
+        protected bool RenameOne = false;
 
         public ImageCompareWindow()
         {
@@ -33,13 +30,15 @@ namespace ImageTagWPF.Controls.Windows
 
         private void Image1_OnOnPick()
         {
-            OnPick?.Invoke(Image1.Path);
+            ResultImage = Image1.Path;
+            
             Close();
         }
 
         private void Image2_OnOnPick()
         {
-            OnPick?.Invoke(Image2.Path);
+            ResultImage = Image2.Path;
+
             Close();
         }
 
@@ -53,38 +52,38 @@ namespace ImageTagWPF.Controls.Windows
         }
 
 
-        public static bool ShowDialog(string image1, string image2, out string result, out bool keepBoth)
+        public static bool ShowDialog(string image1, string image2, out string result, out bool keepBoth, out bool renameOne)
         {
             var window = new ImageCompareWindow();
             window.Image1.SetImageSource(image1);
             window.Image2.SetImageSource(image2);
-            window.OnPick += Window_OnPick;
 
             result = string.Empty;
-            ResultImage = result;
 
             if (window.ShowDialog().HasValue)
             {
-                result = ResultImage;
+                result = window.ResultImage;
                 keepBoth = window.KeepBoth;
+                renameOne = window.RenameOne;
                 return true;
             }
-            window.OnPick -= Window_OnPick;
 
             keepBoth = window.KeepBoth;
+            renameOne = window.RenameOne;
 
             return false;
         }
 
-        private static void Window_OnPick(string result)
+        private static void Window_OnPick(string result, bool keepBoth, bool renameOne)
         {
-            ResultImage = result;
         }
 
         private void KeepBothButton_OnClick(object sender, RoutedEventArgs e)
         {
-            OnPick?.Invoke(Image2.Path);
+            ResultImage = Image2.Path;
             KeepBoth = true;
+            RenameOne = AutoRenameCheckbox.IsChecked.Value;
+            
             Close();
         }
     }

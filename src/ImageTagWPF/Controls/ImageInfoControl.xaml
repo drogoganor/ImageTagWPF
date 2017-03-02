@@ -5,25 +5,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ImageTagWPF.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="555" d:DesignWidth="300">
+             d:DesignHeight="575" d:DesignWidth="300">
     <Grid>
-        <Image x:Name="Image" HorizontalAlignment="Stretch" Height="219" VerticalAlignment="Top" Margin="10,10,10,10"/>
+        <Image x:Name="Image" HorizontalAlignment="Stretch" Height="229" VerticalAlignment="Top" Margin="2,0,0,0"/>
         <Label x:Name="label" Content="Path" HorizontalAlignment="Left" Margin="10,234,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label4" Content="Size" HorizontalAlignment="Left" Margin="169,291,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.419,0.615"/>
+        <Label x:Name="label4" Content="Size" HorizontalAlignment="Left" Margin="169,310,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.419,0.615"/>
 
-        <Label x:Name="label1" Content="Checksum" HorizontalAlignment="Left" Margin="10,338,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label2" Content="Date Modified" HorizontalAlignment="Left" Margin="10,395,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label3" Content="DateCreated" HorizontalAlignment="Left" Margin="10,447,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label1" Content="Checksum" HorizontalAlignment="Left" Margin="10,357,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label2" Content="Date Modified" HorizontalAlignment="Left" Margin="10,414,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label3" Content="Date Created" HorizontalAlignment="Left" Margin="10,466,0,0" VerticalAlignment="Top"/>
 
-        <TextBox x:Name="PathTextBlock" HorizontalAlignment="Stretch" Margin="10,265,5,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="21"/>
-        <TextBlock x:Name="SizeTextBlock" HorizontalAlignment="Stretch" Margin="169,322,18,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
-        <TextBox x:Name="ChecksumTextBlock" HorizontalAlignment="Stretch" Margin="10,369,5,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="21"/>
-        <TextBlock x:Name="DateModifiedTextBlock" HorizontalAlignment="Stretch" Margin="10,426,5,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
-        <TextBlock x:Name="DateCreatedTextBlock" HorizontalAlignment="Stretch" Margin="10,478,5,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
-        <Button x:Name="AcceptButton" Content="Use This Image" HorizontalAlignment="Stretch" Margin="10,499,10,0" VerticalAlignment="Top" Height="46"
-                Click="AcceptButton_OnClick"/>
-        <Label x:Name="label4_Copy" Content="Dimensions" HorizontalAlignment="Left" Margin="10,291,0,0" VerticalAlignment="Top"/>
-        <TextBlock x:Name="DimensionsTextBlock" HorizontalAlignment="Stretch" Margin="10,322,177,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <TextBox x:Name="PathTextBlock" HorizontalAlignment="Stretch" Margin="10,265,5,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="40"/>
+        <TextBlock x:Name="SizeTextBlock" HorizontalAlignment="Stretch" Margin="169,341,18,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <TextBox x:Name="ChecksumTextBlock" HorizontalAlignment="Stretch" Margin="10,388,5,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="21"/>
+        <TextBlock x:Name="DateModifiedTextBlock" HorizontalAlignment="Stretch" Margin="10,445,5,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <TextBlock x:Name="DateCreatedTextBlock" HorizontalAlignment="Stretch" Margin="10,497,5,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <Button x:Name="AcceptButton" Content="Use This Image" HorizontalAlignment="Center" Margin="5,529,5,0" VerticalAlignment="Top" Height="35"
+                Click="AcceptButton_OnClick" Width="144"/>
+        <Label x:Name="label4_Copy" Content="Dimensions" HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="DimensionsTextBlock" HorizontalAlignment="Stretch" Margin="10,341,177,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
         <Button x:Name="OpenImageButton" Content="Open" HorizontalAlignment="Right" Margin="0,234,10,0" VerticalAlignment="Top" Width="75" Height="26" Click="OpenImageButton_Click"/>
 
     </Grid>

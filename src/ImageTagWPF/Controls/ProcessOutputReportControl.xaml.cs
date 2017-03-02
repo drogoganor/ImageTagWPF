@@ -69,8 +69,9 @@ namespace ImageTagWPF.Controls
                 {
                     string result = string.Empty;
                     bool bothImages = false;
+                    bool renameOne = false;
                     var ok = ImageCompareWindow.ShowDialog(Process.SourceFilename, Process.DestinationFilename,
-                        out result, out bothImages);
+                        out result, out bothImages, out renameOne);
 
                     if (ok && !String.IsNullOrEmpty(result))
                     {
@@ -78,31 +79,31 @@ namespace ImageTagWPF.Controls
                         if (bothImages)
                         {
                             // Keep both
-
-                            /*var targetImage =
-                                App.ImageTag.Entities.Images.FirstOrDefault(x => x.Path.Trim().ToLower() == result);
-
-                            if (targetImage != null && File.Exists(targetImage.Path))
+                            if (renameOne)
                             {
-                                var suffix = Path.GetExtension(targetImage.Path);
-                                var newPath = targetImage.Path.Substring(0, targetImage.Path.Length - suffix.Length)
-                                              + " " + Path.GetRandomFileName().Substring(0, 6)
-                                              + suffix;
+                                var targetImage = App.ImageTag.Entities.Images.FirstOrDefault(x => x.Path.Trim().ToLower() == result);
 
-
-                                if (!Util.RetryMove(targetImage.Path, newPath))
+                                if (targetImage != null && File.Exists(targetImage.Path))
                                 {
-                                    App.Log.Error("Couldn't move file: " + targetImage.Path + " to " + newPath);
-                                    return;
-                                }
-
-
-                                targetImage.Path = newPath;
+                                    var suffix = Path.GetExtension(targetImage.Path);
+                                    var newPath = targetImage.Path.Substring(0, targetImage.Path.Length - suffix.Length)
+                                                  + " " + Path.GetRandomFileName().Substring(0, 6)
+                                                  + suffix;
+                                    
+                                    if (!Util.RetryMove(targetImage.Path, newPath))
+                                    {
+                                        App.Log.Error("Couldn't move file: " + targetImage.Path + " to " + newPath);
+                                        return;
+                                    }
+                                    
+                                    targetImage.Path = newPath;
                                 
-                                App.ImageTag.Entities.SaveChanges();
+                                    App.ImageTag.Entities.SaveChanges();
 
-                                App.Log.Info("Saved renamed file as: " + newPath);
-                            }*/
+                                    App.Log.Info("Saved renamed file as: " + newPath);
+                                }
+                            }
+
                         }
                         else
                         {
@@ -150,7 +151,7 @@ namespace ImageTagWPF.Controls
                                 }
 
 
-                                // Update process report items - remove any with the same path as our discarded
+                                // Update process report items - remove any with the same target path as our discarded
                                 if (Report != null)
                                 {
                                     var removeList = new List<ProcessOperation>();
@@ -158,19 +159,9 @@ namespace ImageTagWPF.Controls
                                     {
                                         if (processOperation.Output == Process.Output)
                                         {
-                                            if (processOperation.SourceFilename.ToLowerInvariant().Trim() ==
-                                                discardedImageName)
-                                            {
-                                                processOperation.SourceFilename = result;
-                                            }
-                                            else if (processOperation.DestinationFilename.ToLowerInvariant().Trim() ==
-                                                     discardedImageName)
-                                            {
-                                                processOperation.DestinationFilename = result;
-                                            }
-
-                                            if (processOperation.SourceFilename.ToLower().Trim() ==
-                                                processOperation.DestinationFilename.ToLower().Trim())
+                                            // If the source is the same as the discarded image, remove
+                                            if (processOperation.SourceFilename.ToLowerInvariant().Trim() == discardedImageName
+                                                || processOperation.DestinationFilename.ToLowerInvariant().Trim() == discardedImageName)
                                             {
                                                 removeList.Add(processOperation);
                                             }
@@ -182,11 +173,6 @@ namespace ImageTagWPF.Controls
                                         Report.Operations.Remove(processOperation);
                                     }
 
-                                    // Remove ourselves too
-                                    Report.Operations.Remove(Process);
-                                    Process = null;
-
-                                    SetProcessReport(Report);
                                 }
 
 
@@ -196,6 +182,17 @@ namespace ImageTagWPF.Controls
                             {
                                 App.Log.Error("Error: Either target image or discarded image couldn't be found: " + result +
                                               ", " + discardedImageName);
+                                return;
+                            }
+
+
+                            // Remove ourselves too
+                            if (Report != null)
+                            {
+                                Report.Operations.Remove(Process);
+                                Process = null;
+
+                                SetProcessReport(Report);
                             }
                         }
 

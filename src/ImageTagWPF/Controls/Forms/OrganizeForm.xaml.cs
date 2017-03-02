@@ -330,48 +330,8 @@ namespace ImageTagWPF.Controls.Forms
                     var newItem = list[ourIndex];
 
 
-                    // Swap 
-                    var tempDir = new OrganizeDirectory()
-                    {
-                        BackColor = newItem.BackColor,
-                        ChildDirectories = newItem.ChildDirectories.ToList(),
-                        Tags = newItem.Tags.ToList(),
-                        Name = newItem.Name,
-                        IgnoreParent = newItem.IgnoreParent,
-                        OrTags = newItem.OrTags,
-                        CopyOnly = newItem.CopyOnly,
-                        Rating = newItem.Rating,
-                        Description = newItem.Description,
-                        ForeColor = newItem.ForeColor,
-                        TheseTagsOnly = newItem.TheseTagsOnly
-                    };
-
-                    newItem.BackColor = selectedItem.BackColor;
-                    newItem.ForeColor = selectedItem.ForeColor;
-                    newItem.ChildDirectories = selectedItem.ChildDirectories.ToList();
-                    newItem.Tags = selectedItem.Tags.ToList();
-                    newItem.Name = selectedItem.Name;
-                    newItem.IgnoreParent = selectedItem.IgnoreParent;
-                    newItem.OrTags = selectedItem.OrTags;
-                    newItem.CopyOnly = selectedItem.CopyOnly;
-                    newItem.Rating = selectedItem.Rating;
-                    newItem.Description = selectedItem.Description;
-                    newItem.TheseTagsOnly = selectedItem.TheseTagsOnly;
-
-
-                    selectedItem.BackColor = tempDir.BackColor;
-                    selectedItem.ForeColor = tempDir.ForeColor;
-                    selectedItem.ChildDirectories = tempDir.ChildDirectories.ToList();
-                    selectedItem.Tags = tempDir.Tags.ToList();
-                    selectedItem.Name = tempDir.Name;
-                    selectedItem.IgnoreParent = tempDir.IgnoreParent;
-                    selectedItem.OrTags = tempDir.OrTags;
-                    selectedItem.CopyOnly = tempDir.CopyOnly;
-                    selectedItem.Rating = tempDir.Rating;
-                    selectedItem.Description = tempDir.Description;
-                    selectedItem.TheseTagsOnly = tempDir.TheseTagsOnly;
+                    SwapOrganizeDirectory(selectedItem, newItem);
                     
-
 
                     parentDir.ChildDirectories = list;
 
@@ -384,5 +344,108 @@ namespace ImageTagWPF.Controls.Forms
             }
         }
 
+
+        protected void SwapOrganizeDirectory(OrganizeDirectory dir1, OrganizeDirectory dir2)
+        {
+            // Swap 
+            var tempDir = new OrganizeDirectory()
+            {
+                BackColor = dir2.BackColor,
+                ChildDirectories = dir2.ChildDirectories.ToList(),
+                Tags = dir2.Tags.ToList(),
+                Name = dir2.Name,
+                IgnoreParent = dir2.IgnoreParent,
+                OrTags = dir2.OrTags,
+                CopyOnly = dir2.CopyOnly,
+                Rating = dir2.Rating,
+                Description = dir2.Description,
+                ForeColor = dir2.ForeColor,
+                TheseTagsOnly = dir2.TheseTagsOnly
+            };
+
+            dir2.BackColor = dir1.BackColor;
+            dir2.ForeColor = dir1.ForeColor;
+            dir2.ChildDirectories = dir1.ChildDirectories.ToList();
+            dir2.Tags = dir1.Tags.ToList();
+            dir2.Name = dir1.Name;
+            dir2.IgnoreParent = dir1.IgnoreParent;
+            dir2.OrTags = dir1.OrTags;
+            dir2.CopyOnly = dir1.CopyOnly;
+            dir2.Rating = dir1.Rating;
+            dir2.Description = dir1.Description;
+            dir2.TheseTagsOnly = dir1.TheseTagsOnly;
+
+
+            dir1.BackColor = tempDir.BackColor;
+            dir1.ForeColor = tempDir.ForeColor;
+            dir1.ChildDirectories = tempDir.ChildDirectories.ToList();
+            dir1.Tags = tempDir.Tags.ToList();
+            dir1.Name = tempDir.Name;
+            dir1.IgnoreParent = tempDir.IgnoreParent;
+            dir1.OrTags = tempDir.OrTags;
+            dir1.CopyOnly = tempDir.CopyOnly;
+            dir1.Rating = tempDir.Rating;
+            dir1.Description = tempDir.Description;
+            dir1.TheseTagsOnly = tempDir.TheseTagsOnly;
+        }
+
+        protected void MoveNodeAllTheWay(bool up)
+        {
+            var selectedItem = OrganizeTree.FileTree.SelectedItem as OrganizeDirectory;
+            if (selectedItem != null)
+            {
+                // get parent
+                if (selectedItem.ParentDirectories.Count > 0)
+                {
+                    var parentDir = selectedItem.ParentDirectories.First();
+
+                    int ourIndex = 0;
+                    if (!up)
+                    {
+                        ourIndex = parentDir.ChildDirectories.Count - 1;
+                    }
+                    
+                    var list = parentDir.ChildDirectories.ToList();
+
+                    var newItem = list[ourIndex];
+
+                    if (newItem == selectedItem || newItem.ID == selectedItem.ID)
+                        return;
+
+                    SwapOrganizeDirectory(selectedItem, newItem);
+                    parentDir.ChildDirectories = list;
+                    OrganizeTree.FileTree.SelectItem(newItem);
+                }
+
+            }
+        }
+
+        private void OrganizeTree_OnOnNodeMoveTop()
+        {
+            MoveNodeAllTheWay(true);
+
+
+            //App.ImageTag.Entities.SaveChanges();
+
+            var selectedItem = OrganizeTree.FileTree.SelectedItem as OrganizeDirectory;
+
+            OrganizeTree.Initialize(); // refresh content
+
+            OrganizeTree.FileTree.SelectItem(selectedItem);
+        }
+
+        private void OrganizeTree_OnOnNodeMoveBottom()
+        {
+            MoveNodeAllTheWay(false);
+
+
+            //App.ImageTag.Entities.SaveChanges();
+
+            var selectedItem = OrganizeTree.FileTree.SelectedItem as OrganizeDirectory;
+
+            OrganizeTree.Initialize(); // refresh content
+
+            OrganizeTree.FileTree.SelectItem(selectedItem);
+        }
     }
 }

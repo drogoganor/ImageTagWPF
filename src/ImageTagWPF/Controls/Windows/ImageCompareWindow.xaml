@@ -17,7 +17,8 @@
         </Grid.RowDefinitions>
         <Controls:ImageInfoControl x:Name="Image1" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Top" OnPick="Image1_OnOnPick"/>
         <Controls:ImageInfoControl x:Name="Image2" Margin="10" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" OnPick="Image2_OnOnPick"/>
-        
-        <Button x:Name="KeepBothButton" Grid.Row="1" Grid.ColumnSpan="2" Width="240" Content="Keep Both" Click="KeepBothButton_OnClick" />
+
+        <Button x:Name="KeepBothButton" Grid.Row="1" Grid.ColumnSpan="2" Height="35" Content="Keep Both" Click="KeepBothButton_OnClick" Margin="200,6,278,6" />
+        <CheckBox x:Name="AutoRenameCheckbox" Content="Auto-Rename One" IsChecked="True" Grid.Row="1" HorizontalAlignment="Left" Margin="59,18,0,0" VerticalAlignment="Top" Grid.Column="1"/>
     </Grid>
 </Window>

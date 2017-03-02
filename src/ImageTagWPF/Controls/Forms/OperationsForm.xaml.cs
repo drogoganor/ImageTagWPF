@@ -86,7 +86,7 @@ namespace ImageTagWPF.Controls.Forms
 
             var dispatchItem = new ImageTagDispatchItem()
             {
-                //Action = () => App.ImageTag.FindOrphans(),
+                //Action = () => App.ImageTag.FindOrphanedFiles(),
                 Action = () => App.ImageTag.FindDuplicateFilesByContent(),
                 //Action = () => App.ImageTag.CheckFileDupesTest(),
                 Description = "Finding duplicate files by content",
@@ -100,7 +100,7 @@ namespace ImageTagWPF.Controls.Forms
         {
             var dispatchItem = new ImageTagDispatchItem()
             {
-                Action = () => App.ImageTag.FindOrphans(),
+                Action = () => App.ImageTag.FindOrphanedFiles(),
                 Description = "Finding orphaned files",
                 Dispatcher = Dispatcher
             };

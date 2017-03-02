@@ -380,7 +380,7 @@ namespace ImageTagWPF.Code
 
                             FileProcessData.Operations.Add(new ProcessOperation()
                             {
-                                Message = "File already existed: " + targetPath,
+                                Message = msg,
                                 Output = ProcessRecommendedOutput.CompareFiles,
                                 Severity = FileProcessSeverity.Error,
                                 SourceFilename = imageResult.Path,
@@ -1035,7 +1035,7 @@ namespace ImageTagWPF.Code
             App.Log.Info("Finished replacing directory.");
         }
 
-        public void FindOrphans()
+        public void FindOrphanedFiles()
         {
             string rootDir = App.ImageTag.Settings.DefaultDirectory;
 
@@ -1044,6 +1044,8 @@ namespace ImageTagWPF.Code
             {
                 rootDir = dir.Name;
             }
+
+            var token = App.CancellationTokenSource.Token;
 
             if (!Directory.Exists(rootDir))
                 return;
@@ -1085,6 +1087,12 @@ namespace ImageTagWPF.Code
                     break;
                 }
 
+
+                if (token.IsCancellationRequested)
+                {
+                    App.Log.Error("Aborted finding orphaned files.");
+                    return;
+                }
 
                 /*
                 foreach (var fileInfo in files)

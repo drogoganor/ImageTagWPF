@@ -20,6 +20,12 @@ namespace ImageTagWPF.Code
 
         public ImageDuplicateFinder()
         {
+
+        }
+
+
+        protected void InitializeBatchImages()
+        {
             AllImages = App.ImageTag.Entities.Images.ToList();
 
             foreach (var allImage in AllImages)
@@ -45,6 +51,7 @@ namespace ImageTagWPF.Code
             App.Log.Info("Find duplicate images by content");
             App.Log.Info("================================================");
 
+            var token = App.CancellationTokenSource.Token;
 
             bool checkOnlySameDir = true;
 
@@ -52,6 +59,9 @@ namespace ImageTagWPF.Code
             {
                 OperationTitle = "Finding duplicate images by content"
             };
+
+
+            InitializeBatchImages();
 
 
             var matchingSizes = from i in BatchImages
@@ -77,6 +87,12 @@ namespace ImageTagWPF.Code
 
                     foreach (var innerImage in matchingImages)
                     {
+                        if (token.IsCancellationRequested)
+                        {
+                            App.Log.Error("Aborted checking files by content.");
+                            return;
+                        }
+
                         if (checkedHash.Contains(innerImage.Image.Path))
                             continue;
 
