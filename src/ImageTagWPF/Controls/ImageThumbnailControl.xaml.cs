@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ImageTagWPF.Model;
+using Path = System.IO.Path;
 
 namespace ImageTagWPF.Controls
 {
@@ -37,6 +38,17 @@ namespace ImageTagWPF.Controls
                     System.Diagnostics.Process.Start(App.ImageTag.Settings.DefaultImageViewProgram, file.FullPath);
                 else
                     System.Diagnostics.Process.Start(file.FullPath);
+            }
+        }
+
+        private void ExploreToMenu_OnClick(object sender, RoutedEventArgs e)
+        {
+            var file = this.DataContext as ImageFileThumbData;
+            if (file != null && File.Exists(file.FullPath))
+            {
+                string argument = "/select, \"" + file.FullPath + "\"";
+
+                Process.Start("explorer.exe", argument);
             }
         }
     }

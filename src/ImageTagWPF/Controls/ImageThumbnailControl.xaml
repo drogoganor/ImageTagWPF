@@ -13,9 +13,15 @@
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
-        <Image x:Name="ThumbnailImage" Source="{Binding ImageSource}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,10"></Image>
-        <TextBlock x:Name="FilenameText" Grid.Row="1" Text="{Binding Filename}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,10">
-            
+        <Image x:Name="ThumbnailImage" Source="{Binding ImageSource}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,10">
+            <Image.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="ExploreToMenu" Header="Explore to..." Click="ExploreToMenu_OnClick"/>
+                </ContextMenu>
+            </Image.ContextMenu>
+        </Image>
+        <TextBlock x:Name="FilenameText" Grid.Row="1" Text="{Binding Filename}" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" Margin="5">
+
         </TextBlock>
     </Grid>
 </UserControl>

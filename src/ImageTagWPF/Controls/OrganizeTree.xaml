@@ -46,8 +46,8 @@
             <Grid Grid.Column="0" Grid.ColumnSpan="2">
                 <Button x:Name="MoveUpButton" Content="Move Up" HorizontalAlignment="Left" Margin="0,57,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="MoveUpButton_Click"/>
                 <Button x:Name="MoveDownButton" Content="Move Down" HorizontalAlignment="Left" Margin="80,57,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="MoveDownButton_Click"/>
-                <Button x:Name="MoveTopButton" Content="Move to Top" HorizontalAlignment="Left" Margin="160,57,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="MoveToTopButton_Click"/>
-                <Button x:Name="MoveBottomButton" Content="Move to Bottom" HorizontalAlignment="Left" Margin="240,57,0,0" VerticalAlignment="Top" Width="100" Height="23" Click="MoveToBottomButton_Click"/>
+                <Button x:Name="MoveTopButton" IsEnabled="False" Content="Move to Top" HorizontalAlignment="Left" Margin="160,57,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="MoveToTopButton_Click"/>
+                <Button x:Name="MoveBottomButton" IsEnabled="False" Content="Move to Bottom" HorizontalAlignment="Left" Margin="240,57,0,0" VerticalAlignment="Top" Width="100" Height="23" Click="MoveToBottomButton_Click"/>
             </Grid>
         </Grid>
     </Grid>
