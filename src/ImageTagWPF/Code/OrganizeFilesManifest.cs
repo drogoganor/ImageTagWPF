@@ -10,6 +10,7 @@ namespace ImageTagWPF.Code
     public class OrganizeFilesManifest
     {
         public Dictionary<string, OrganizeFile> Files { get; set; }
+        
 
         public OrganizeFilesManifest()
         {

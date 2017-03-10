@@ -263,7 +263,7 @@ namespace ImageTagWPF.Code
                 //OrganizeImagesForDir(rootDir, string.Empty, App.ImageTag.Entities.Images, suppressSuccessMessages);
 
                 GetOrganizeManifestForDir(rootDir, string.Empty, App.ImageTag.Entities.Images);
-
+                
                 OrganizeImagesForManifest(OrganizeFilesManifest, suppressSuccessMessages);
 
                 PersistData();
@@ -345,31 +345,31 @@ namespace ImageTagWPF.Code
                     {
                         var targetPath = Path.Combine(fullPath, Path.GetFileName(imageResult.Path));
 
-                        if (targetPath.Trim().ToLower() == imageResult.Path.Trim().ToLower())
-                            continue;
+                        //if (targetPath.Trim().ToLower() == imageResult.Path.Trim().ToLower()) // Early drop-out resulted in correctly placed files being moved elsewhere
+                        //    continue;
 
-                        if (!File.Exists(targetPath))
+                        //if (!File.Exists(targetPath))
+                        //{
+                        if (dir.CopyOnly != 0)
                         {
-                            if (dir.CopyOnly != 0)
+                            AddOrganizeManifestFile(new OrganizeFile()
                             {
-                                AddOrganizeManifestFile(new OrganizeFile()
-                                {
-                                    Image = imageResult,
-                                    Destination = targetPath,
-                                    Operation = OrganizeOperation.Copy
-                                });
-                            }
-                            else
-                            {
-                                AddOrganizeManifestFile(new OrganizeFile()
-                                {
-                                    Image = imageResult,
-                                    Destination = targetPath,
-                                    Operation = OrganizeOperation.Move
-                                });
-                            }
-
+                                Image = imageResult,
+                                Destination = targetPath,
+                                Operation = OrganizeOperation.Copy
+                            });
                         }
+                        else
+                        {
+                            AddOrganizeManifestFile(new OrganizeFile()
+                            {
+                                Image = imageResult,
+                                Destination = targetPath,
+                                Operation = OrganizeOperation.Move
+                            });
+                        }
+
+                        /*}
                         else
                         {
                             // File already existed                        
@@ -386,9 +386,9 @@ namespace ImageTagWPF.Code
                                 SourceFilename = imageResult.Path,
                                 DestinationFilename = targetPath
                             });
-                        }
+                        }*/
 
-                    }
+                        }
                     else
                     {
                         // Couldn't find image in db                    
@@ -718,6 +718,10 @@ namespace ImageTagWPF.Code
                         }
                         else
                         {
+                            // Don't move if same
+                            if (manifestItem.Image.Path.ToLowerInvariant().Trim() == manifestItem.Destination.ToLowerInvariant().Trim())
+                                continue;
+
                             // Move the file and update database
                             try
                             {
