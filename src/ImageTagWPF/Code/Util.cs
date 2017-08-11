@@ -17,9 +17,12 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+
 using ImageTagWPF.Data;
 using ImageTagWPF.Model;
+
 using Microsoft.Win32;
+
 using Image = ImageTagWPF.Data.Image;
 using Color = System.Windows.Media.Color;
 using PixelFormat = System.Windows.Media.PixelFormat;
@@ -31,7 +34,7 @@ namespace ImageTagWPF.Code
     public static class Util
     {
         private static Random Random = new Random();
-        
+
 
         public static string GetFileHashSHA1(string filename)
         {
@@ -48,8 +51,7 @@ namespace ImageTagWPF.Code
 
         public static IEnumerable<FileInfo> GetFilesByExtensions(this DirectoryInfo dir, params string[] extensions)
         {
-            if (extensions == null)
-                throw new ArgumentNullException("extensions");
+            if (extensions == null) throw new ArgumentNullException("extensions");
             IEnumerable<FileInfo> files = Enumerable.Empty<FileInfo>();
             foreach (string ext in extensions)
             {
@@ -61,11 +63,11 @@ namespace ImageTagWPF.Code
         // https://stackoverflow.com/questions/5936628/get-items-in-view-within-a-listbox
         public static bool BoundsContainsItem(this FrameworkElement container, FrameworkElement element)
         {
-            if (!element.IsVisible)
-                return false;
+            if (!element.IsVisible) return false;
 
             Rect bounds =
-                element.TransformToAncestor(container).TransformBounds(new Rect(0.0, 0.0, element.ActualWidth, element.ActualHeight));
+                element.TransformToAncestor(container)
+                    .TransformBounds(new Rect(0.0, 0.0, element.ActualWidth, element.ActualHeight));
             var rect = new Rect(0.0, 0.0, container.ActualWidth, container.ActualHeight);
             return rect.Contains(bounds.TopLeft) || rect.Contains(bounds.BottomRight);
         }
@@ -96,6 +98,7 @@ namespace ImageTagWPF.Code
             if (File.Exists(fullPath))
             {
                 thumbImage = new BitmapImage();
+                bool isWebM = false;
                 try
                 {
                     // BitmapImage.UriSource must be in a BeginInit/EndInit block
@@ -117,8 +120,43 @@ namespace ImageTagWPF.Code
                 }
                 catch (Exception ex)
                 {
-                    App.Log.Error("Couldn't create thumbnnail for: " + fullPath + " : " + ex.Message);
-                    thumbImage = null;
+                    if (fullPath.ToLowerInvariant().EndsWith(".webm"))
+                    {
+                        isWebM = true;
+                    }
+                    else
+                    {
+                        App.Log.Error("Couldn't create thumbnnail for: " + fullPath + " : " + ex.Message);
+                        thumbImage = null;
+                    }
+                }
+
+                if (isWebM)
+                {
+                    try
+                    {
+                        var tempImageFilename = Guid.NewGuid().ToString() + ".png";
+                        var tempImagePath = Path.Combine(App.ImageTag.Settings.TempDirectory, tempImageFilename);
+                        
+                        var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
+                        ffMpeg.GetVideoThumbnail(fullPath, tempImagePath, 5);
+                        
+                        thumbImage = new BitmapImage();
+                        thumbImage.BeginInit();
+                        thumbImage.CacheOption = BitmapCacheOption.OnLoad;
+                        thumbImage.UriSource = new Uri(tempImagePath, UriKind.Absolute);
+                        thumbImage.DecodePixelWidth = thumbWidth;
+                        thumbImage.EndInit();
+                        thumbImage.Freeze();
+
+                        File.Delete(tempImagePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Log.Error("Couldn't create thumbnnail for webm: " + fullPath + " : " + ex.Message);
+                        thumbImage = null;
+                    }
+
                 }
             }
             return thumbImage;

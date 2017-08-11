@@ -47,6 +47,7 @@ namespace ImageTagWPF.Code
 
         public ProcessOutputReport FileProcessData;
 
+        protected OrganizeFilesManifest OrganizeFilesManifest;
 
         public ImageTag()
         {
@@ -62,6 +63,8 @@ namespace ImageTagWPF.Code
                 Settings.InitializeDefaults();
                 Settings.SaveToXml(SettingsName);
             }
+
+            Settings.InitializeDirectories();
         }
 
         public void Initialize()
@@ -218,7 +221,6 @@ namespace ImageTagWPF.Code
 
 
 
-        protected OrganizeFilesManifest OrganizeFilesManifest;
 
         public void OrganizeImages(bool suppressSuccessMessages = false)
         {
@@ -275,17 +277,25 @@ namespace ImageTagWPF.Code
 
         protected void AddOrganizeManifestFile(OrganizeFile organizeFile)
         {
-            string id = organizeFile.UniqueFileOperationID;
+            string id = organizeFile.ID;
             if (!OrganizeFilesManifest.Files.ContainsKey(id))
             {
                 OrganizeFilesManifest.Files.Add(id, organizeFile);
             }
-            else
-            {
-                var existing = OrganizeFilesManifest.Files[id];
-                existing.Destination = organizeFile.Destination;
-            }
         }
+
+
+        protected OrganizeFile GetOrganizeFileByID(string id)
+        {
+            if (OrganizeFilesManifest.Files.ContainsKey(id))
+            {
+                return OrganizeFilesManifest.Files[id];
+            }
+            return null;
+        }
+
+
+
 
         protected void GetOrganizeManifestForDir(OrganizeDirectory dir, string cumulativePath,
             IQueryable<Image> cumulativeQuery)
@@ -310,6 +320,7 @@ namespace ImageTagWPF.Code
                     cumulativeQuery = App.ImageTag.Entities.Images;
                 }
 
+                // Filter by rating
                 bool useRating = dir.Rating.HasValue;
                 if (useRating)
                 {
@@ -317,7 +328,7 @@ namespace ImageTagWPF.Code
                     cumulativeQuery = cumulativeQuery.Where(x => x.Rating.HasValue && (int) x.Rating.Value >= rating);
                 }
 
-
+                // Filter by tags
                 if (dir.TheseTagsOnly != 0)
                 {
                     imageResults =
@@ -325,14 +336,14 @@ namespace ImageTagWPF.Code
                 }
                 else
                 {
-                    if (dir.OrTags != 0) // Get or
+                    if (dir.OrTags != 0) // Get OR
                     {
                         imageResults =
                             cumulativeQuery.Where(y => tags.Any(t => y.Tags.Any(mt => (int) mt.ID == t))).ToList();
                     }
                     else
                     {
-                        imageResults = // Get and
+                        imageResults = // Get AND
                             cumulativeQuery.Where(y => tags.All(t => y.Tags.Any(mt => (int) mt.ID == t))).ToList();
                     }
 
@@ -345,50 +356,36 @@ namespace ImageTagWPF.Code
                     {
                         var targetPath = Path.Combine(fullPath, Path.GetFileName(imageResult.Path));
 
-                        //if (targetPath.Trim().ToLower() == imageResult.Path.Trim().ToLower()) // Early drop-out resulted in correctly placed files being moved elsewhere
-                        //    continue;
+                        string id = imageResult.ID.ToString("D0");
+                        var organizeFile = GetOrganizeFileByID(id);
+                        if (organizeFile == null)
+                        {
+                            organizeFile = new OrganizeFile() { Image = imageResult };
 
-                        //if (!File.Exists(targetPath))
-                        //{
+                            AddOrganizeManifestFile(organizeFile);
+                        }
+
+                        
                         if (dir.CopyOnly != 0)
                         {
-                            AddOrganizeManifestFile(new OrganizeFile()
+
+
+                            organizeFile.AddOperation(new OrganizeOperation()
                             {
-                                Image = imageResult,
                                 Destination = targetPath,
-                                Operation = OrganizeOperation.Copy
+                                Operation = OrganizeOperationType.Copy
                             });
                         }
                         else
                         {
-                            AddOrganizeManifestFile(new OrganizeFile()
+                            organizeFile.AddOperation(new OrganizeOperation()
                             {
-                                Image = imageResult,
                                 Destination = targetPath,
-                                Operation = OrganizeOperation.Move
+                                Operation = OrganizeOperationType.Move
                             });
                         }
-
-                        /*}
-                        else
-                        {
-                            // File already existed                        
-                            msg = "File already existed: " + targetPath + "\t  from " +
-                                  imageResult.Path + " .\t";
-                            //+" Tags: " + String.Join(", ", dir.Tags.Select(x => x.Name).ToArray());
-                            App.Log.Error(msg);
-
-                            FileProcessData.Operations.Add(new ProcessOperation()
-                            {
-                                Message = msg,
-                                Output = ProcessRecommendedOutput.CompareFiles,
-                                Severity = FileProcessSeverity.Error,
-                                SourceFilename = imageResult.Path,
-                                DestinationFilename = targetPath
-                            });
-                        }*/
-
-                        }
+                        
+                    }
                     else
                     {
                         // Couldn't find image in db                    
@@ -639,52 +636,34 @@ namespace ImageTagWPF.Code
         {
             var items = manifest.Files.Values.ToList();
 
-            string msg;
+            string msg = null;
             foreach (var manifestItem in items)
             {
                 if (manifestItem.Image != null && File.Exists(manifestItem.Image.Path))
                 {
-                    var targetDir = Path.GetDirectoryName(manifestItem.Destination);
+                    var orderedOperations = manifestItem.Operations.OrderByDescending(x => x.Operation);
 
-                    if (!Directory.Exists(targetDir))
+                    foreach (var operation in orderedOperations)
                     {
-                        try
-                        {
-                            Directory.CreateDirectory(targetDir);
-
-                            if (!suppressSuccessMessages)
-                                App.Log.Debug("Created directory OK: " + targetDir);
-                        }
-                        catch (Exception ex)
-                        {
-                            msg = "Couldn't create directory: " + targetDir + " : " + ex.Message;
-                            App.Log.Error(msg);
-
-                            FileProcessData.Operations.Add(new ProcessOperation()
-                            {
-                                Message = msg,
-                                Output = ProcessRecommendedOutput.CheckPermissions,
-                                Severity = FileProcessSeverity.Error,
-                                SourceFilename = targetDir,
-                            });
+                        // Don't move or copy if same
+                        if (manifestItem.Image.Path.ToLowerInvariant().Trim() == operation.Destination.ToLowerInvariant().Trim())
                             continue;
-                        }
-                    }
 
 
-                    if (!File.Exists(manifestItem.Destination))
-                    {
-                        if (manifestItem.Operation == OrganizeOperation.Copy)
+                        var targetDir = Path.GetDirectoryName(operation.Destination);
+
+                        if (!Directory.Exists(targetDir))
                         {
-                            // Copy only
                             try
                             {
-                                File.Copy(manifestItem.Image.Path, manifestItem.Destination);
+                                Directory.CreateDirectory(targetDir);
+
+                                if (!suppressSuccessMessages)
+                                    App.Log.Debug("Created directory OK: " + targetDir);
                             }
                             catch (Exception ex)
                             {
-                                msg = "Couldn't copy file: " + manifestItem.Image.Path + " to " +
-                                      manifestItem.Destination + " : " + ex.Message;
+                                msg = "Couldn't create directory: " + targetDir + " : " + ex.Message;
                                 App.Log.Error(msg);
 
                                 FileProcessData.Operations.Add(new ProcessOperation()
@@ -692,80 +671,120 @@ namespace ImageTagWPF.Code
                                     Message = msg,
                                     Output = ProcessRecommendedOutput.CheckPermissions,
                                     Severity = FileProcessSeverity.Error,
-                                    SourceFilename = manifestItem.Image.Path,
-                                    DestinationFilename = manifestItem.Destination
+                                    SourceFilename = targetDir,
                                 });
-
                                 continue;
                             }
+                        }
 
 
-                            msg = "Copied file OK from " + manifestItem.Image.Path + "  to  " +
-                                  manifestItem.Destination;
-                            //+ " . Tags: " + String.Join(", ", dir.Tags.Select(x => x.Name).ToArray());
-
-                            if (!suppressSuccessMessages)
-                                App.Log.Debug(msg);
-
-                            FileProcessData.Operations.Add(new ProcessOperation()
+                        if (!File.Exists(operation.Destination))
+                        {
+                            if (operation.Operation == OrganizeOperationType.Copy)
                             {
-                                Message = msg,
-                                Output = ProcessRecommendedOutput.None,
-                                Severity = FileProcessSeverity.Info,
-                                SourceFilename = manifestItem.Image.Path,
-                                DestinationFilename = manifestItem.Destination
-                            });
+                                // Copy only
+                                try
+                                {
+                                    File.Copy(manifestItem.Image.Path, operation.Destination);
+                                }
+                                catch (Exception ex)
+                                {
+                                    msg = "Couldn't copy file: " + manifestItem.Image.Path + " to " +
+                                          operation.Destination + " : " + ex.Message;
+                                    App.Log.Error(msg);
+
+                                    FileProcessData.Operations.Add(new ProcessOperation()
+                                    {
+                                        Message = msg,
+                                        Output = ProcessRecommendedOutput.CheckPermissions,
+                                        Severity = FileProcessSeverity.Error,
+                                        SourceFilename = manifestItem.Image.Path,
+                                        DestinationFilename = operation.Destination
+                                    });
+
+                                    continue;
+                                }
+
+
+                                msg = "Copied file OK from " + manifestItem.Image.Path + "  to  " +
+                                      operation.Destination;
+                                //+ " . Tags: " + String.Join(", ", dir.Tags.Select(x => x.Name).ToArray());
+
+                                if (!suppressSuccessMessages)
+                                    App.Log.Debug(msg);
+
+                                FileProcessData.Operations.Add(new ProcessOperation()
+                                {
+                                    Message = msg,
+                                    Output = ProcessRecommendedOutput.None,
+                                    Severity = FileProcessSeverity.Info,
+                                    SourceFilename = manifestItem.Image.Path,
+                                    DestinationFilename = operation.Destination
+                                });
+                            }
+                            else
+                            {
+                                // Move the file and update database
+                                try
+                                {
+                                    File.Move(manifestItem.Image.Path, operation.Destination);
+                                }
+                                catch (Exception ex)
+                                {
+                                    msg = "Couldn't move file: " + manifestItem.Image.Path + " to " +
+                                          operation.Destination + " : " + ex.Message;
+                                    App.Log.Error(msg);
+
+                                    FileProcessData.Operations.Add(new ProcessOperation()
+                                    {
+                                        Message = msg,
+                                        Output = ProcessRecommendedOutput.CheckPermissions,
+                                        Severity = FileProcessSeverity.Error,
+                                        SourceFilename = manifestItem.Image.Path,
+                                        DestinationFilename = operation.Destination
+                                    });
+
+                                    continue;
+                                }
+
+                                // Update directory for object
+                                manifestItem.Image.Path = operation.Destination;
+
+                                msg = "Moved file OK from " + manifestItem.Image.Path + "  to  " + operation.Destination;
+                                //+ " . Tags: " + String.Join(", ", dir.Tags.Select(x => x.Name).ToArray());
+
+                                if (!suppressSuccessMessages)
+                                    App.Log.Debug(msg);
+
+                                FileProcessData.Operations.Add(new ProcessOperation()
+                                {
+                                    Message = msg,
+                                    Output = ProcessRecommendedOutput.None,
+                                    Severity = FileProcessSeverity.Info,
+                                    SourceFilename = manifestItem.Image.Path,
+                                    DestinationFilename = operation.Destination
+                                });
+                            }
                         }
                         else
                         {
-                            // Don't move if same
-                            if (manifestItem.Image.Path.ToLowerInvariant().Trim() == manifestItem.Destination.ToLowerInvariant().Trim())
-                                continue;
-
-                            // Move the file and update database
-                            try
+                            // File existed for this filename - prompt to replace?
+                            if (operation.Operation == OrganizeOperationType.Move)
                             {
-                                File.Move(manifestItem.Image.Path, manifestItem.Destination);
-                            }
-                            catch (Exception ex)
-                            {
-                                msg = "Couldn't move file: " + manifestItem.Image.Path + " to " +
-                                      manifestItem.Destination + " : " + ex.Message;
-                                App.Log.Error(msg);
+                                // Update directory for object
+                                msg = "File existed on move from " + manifestItem.Image.Path + "  to  " + operation.Destination;
+                                App.Log.Warn(msg);
 
                                 FileProcessData.Operations.Add(new ProcessOperation()
                                 {
                                     Message = msg,
-                                    Output = ProcessRecommendedOutput.CheckPermissions,
-                                    Severity = FileProcessSeverity.Error,
+                                    Output = ProcessRecommendedOutput.CompareFiles,
+                                    Severity = FileProcessSeverity.Warn,
                                     SourceFilename = manifestItem.Image.Path,
-                                    DestinationFilename = manifestItem.Destination
+                                    DestinationFilename = operation.Destination
                                 });
-
-                                continue;
                             }
-
-                            // Update directory for object
-                            manifestItem.Image.Path = manifestItem.Destination;
-
-                            msg = "Moved file OK from " + manifestItem.Image.Path + "  to  " + manifestItem.Destination;
-                            //+ " . Tags: " + String.Join(", ", dir.Tags.Select(x => x.Name).ToArray());
-
-                            if (!suppressSuccessMessages)
-                                App.Log.Debug(msg);
-
-                            FileProcessData.Operations.Add(new ProcessOperation()
-                            {
-                                Message = msg,
-                                Output = ProcessRecommendedOutput.None,
-                                Severity = FileProcessSeverity.Info,
-                                SourceFilename = manifestItem.Image.Path,
-                                DestinationFilename = manifestItem.Destination
-                            });
                         }
-                    }
-                    else
-                    {
                     }
                 }
                 else
@@ -995,8 +1014,10 @@ namespace ImageTagWPF.Code
             PersistData();
 
             App.Log.InfoFormat("Finished consolidating duplicate records.");
-
         }
+
+
+
 
         public void ReplaceDir(string search, string replace)
         {
@@ -1059,7 +1080,7 @@ namespace ImageTagWPF.Code
             App.Log.Info("Find orphaned files for: " + rootDir);
             App.Log.Info("================================================");
 
-            var fileExts = App.ImageTag.Settings.FileExtensions.Select(x => x.Substring(1, x.Length - 1)).ToArray();
+            var fileExts = App.ImageTag.Settings.Extensions.Select(x => x.Extension).Select(x => x.Substring(1, x.Length - 1)).ToArray();
 
             int index = 0;
             int pageSize = 1000;

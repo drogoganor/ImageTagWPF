@@ -49,7 +49,7 @@ namespace ImageTagWPF.Controls
             Report = report;
             if (Report != null)
             {
-                ListBox.ItemsSource = Report.Operations.Where(x => x.Severity == FileProcessSeverity.Error);
+                ListBox.ItemsSource = Report.Operations.Where(x => x.Severity == FileProcessSeverity.Warn);
             }
             else
             {

@@ -34,10 +34,14 @@ namespace ImageTagWPF.Controls
             var file = this.DataContext as ImageFileThumbData;
             if (file != null && File.Exists(file.FullPath))
             {
-                if (!String.IsNullOrEmpty(App.ImageTag.Settings.DefaultImageViewProgram))
-                    System.Diagnostics.Process.Start(App.ImageTag.Settings.DefaultImageViewProgram, file.FullPath);
-                else
-                    System.Diagnostics.Process.Start(file.FullPath);
+                var programRecord = App.ImageTag.Settings.Extensions.FirstOrDefault(x => file.FullPath.EndsWith(x.Extension.Substring(1)));
+                if (programRecord != null && File.Exists(programRecord.ViewerProgram))
+                {
+                    if (!String.IsNullOrEmpty(programRecord.ViewerProgram))
+                        System.Diagnostics.Process.Start(programRecord.ViewerProgram, file.FullPath);
+                    else
+                        System.Diagnostics.Process.Start(file.FullPath);
+                }
             }
         }
 

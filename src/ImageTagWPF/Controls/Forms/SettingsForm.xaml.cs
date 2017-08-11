@@ -40,10 +40,11 @@ namespace ImageTagWPF.Controls.Forms
             if (settings != null)
             {
                 DefaultDirectoryTextBox.Text = settings.DefaultDirectory;
+                this.PortableCheckBox.IsChecked = settings.PortableMode;
 
                 CategoryColorsListBox.ItemsSource = settings.TagCategoryColors.ToArray();
 
-                ExtensionListBox.ItemsSource = settings.FileExtensions.ToArray();
+                ExtensionListBox.ItemsSource = settings.Extensions.ToArray();
             }
         }
 
@@ -54,7 +55,8 @@ namespace ImageTagWPF.Controls.Forms
             if (settings != null)
             {
                 settings.DefaultDirectory = DefaultDirectoryTextBox.Text;
-
+                settings.PortableMode = this.PortableCheckBox.IsChecked.Value;
+                
                 var categoryColors = new List<TagCategoryColor>();
                 foreach (var item in CategoryColorsListBox.Items)
                 {
@@ -67,17 +69,25 @@ namespace ImageTagWPF.Controls.Forms
 
                 settings.TagCategoryColors = categoryColors;
 
-                var exts = new List<string>();
+                var exts = new List<ImageExtensionViewerProgram>();
                 foreach (var item in ExtensionListBox.Items)
                 {
-                    var ext = item as string;
+                    var ext = item as ImageExtensionViewerProgram;
                     if (ext != null)
                     {
                         exts.Add(ext);
+
+                        /*
+                        string program = string.Empty;
+                        if (Util.TryGetRegisteredApplication(ext.Substring(1), out program))
+                        {
+                            extPrograms.Add(Util.TryGetRegisteredApplication();
+                        }*/
+
                     }
                 }
 
-                settings.FileExtensions = exts;
+                settings.Extensions = exts;
 
                 var path = Path.Combine(Environment.CurrentDirectory, ImageTag.SettingsName);
                 settings.SaveToXml(path);
@@ -90,31 +100,27 @@ namespace ImageTagWPF.Controls.Forms
             if (!String.IsNullOrEmpty(extText))
             {
                 var settings = App.ImageTag.Settings;
-                // Find all in list
-                var extList = settings.FileExtensions.ToArray();//ExtensionListBox.ItemsSource as IList<string>;
-                if (extList != null)
+
+
+                var matchingExtension = settings.Extensions.FirstOrDefault(x => x.Extension == extText);
+                if (matchingExtension != null)
                 {
-                    var selString = ExtensionListBox.SelectedValue as string;
+                    matchingExtension.ViewerProgram = this.ViewerProgramTextBox.Text;
+                }
+                else
+                {
+                    // None, add new
 
-                    if (selString != extText)
+                    var program = String.Empty;
+                    bool programOK = Util.TryGetRegisteredApplication(extText.Substring(1), out program);
+
+                    settings.Extensions.Add(new ImageExtensionViewerProgram()
                     {
-                        // It's a new one
-                        // Verify it's not in list
-                        if (extList.All(x => x != extText))
-                        {
-                            // Not in list, add new
-                            settings.FileExtensions.Add(extText);
+                        Extension = extText,
+                        ViewerProgram = (programOK ? program : string.Empty)
+                    });
 
-                            ExtensionListBox.ItemsSource = settings.FileExtensions;
-
-
-                        }
-                        else
-                        {
-                            MessageBox.Show("Extension already exists in list.");
-                        }
-
-                    }
+                    ExtensionListBox.ItemsSource = settings.Extensions.ToArray();
                 }
 
 
@@ -127,10 +133,10 @@ namespace ImageTagWPF.Controls.Forms
             {
                 var settings = App.ImageTag.Settings;
 
-                var selString = ExtensionListBox.SelectedValue as string;
-                settings.FileExtensions.Remove(selString);
+                var selString = ExtensionListBox.SelectedValue as ImageExtensionViewerProgram;
+                settings.Extensions.Remove(selString);
 
-                ExtensionListBox.ItemsSource = settings.FileExtensions.ToArray();
+                ExtensionListBox.ItemsSource = settings.Extensions.ToArray();
             }
 
         }
@@ -153,9 +159,10 @@ namespace ImageTagWPF.Controls.Forms
 
         private void ExtensionListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selText = ExtensionListBox.SelectedItem as string;
+            var selText = ExtensionListBox.SelectedItem as ImageExtensionViewerProgram;
 
-            ExtensionTextBox.Text = selText;
+            ExtensionTextBox.Text = selText.Extension;
+            this.ViewerProgramTextBox.Text = selText.ViewerProgram;
         }
 
         private void CategoryColorsListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

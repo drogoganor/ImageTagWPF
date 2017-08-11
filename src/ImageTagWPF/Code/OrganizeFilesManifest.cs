@@ -18,7 +18,7 @@ namespace ImageTagWPF.Code
         }
     }
 
-    public enum OrganizeOperation
+    public enum OrganizeOperationType
     {
         Move,
         Copy
@@ -27,9 +27,34 @@ namespace ImageTagWPF.Code
     public class OrganizeFile
     {
         public Image Image { get; set; }
-        public string Destination { get; set; }
-        public OrganizeOperation Operation { get; set; }
+        
+        public List<OrganizeOperation> Operations = new List<OrganizeOperation>();
 
-        public string UniqueFileOperationID { get { return ((int)Image.ID) + Operation.ToString(); } }
+        public string ID { get { return Image.ID.ToString("D0"); } }
+
+        public void AddOperation(OrganizeOperation operation)
+        {
+            if (operation.Operation == OrganizeOperationType.Move
+                && Operations.Any(x => x.Operation == OrganizeOperationType.Move))
+            {
+                //App.Log.Error("Duplicate move operation for " + Image.Path);
+
+                // Update instead
+                var moveOp = this.Operations.FirstOrDefault(x => x.Operation == OrganizeOperationType.Move);
+                moveOp.Destination = operation.Destination;
+
+                return;
+            }
+
+            Operations.Add(operation);
+        }
     }
+
+    public class OrganizeOperation
+    {
+        public string Destination { get; set; }
+        public OrganizeOperationType Operation { get; set; }
+
+    }
+
 }

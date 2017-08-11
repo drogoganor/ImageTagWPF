@@ -8,22 +8,32 @@
              xmlns:colorPickerWpf="clr-namespace:ColorPickerWPF;assembly=ColorPickerWPF"
              x:Class="ImageTagWPF.Controls.Forms.SettingsForm"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="500">
+             d:DesignHeight="600" d:DesignWidth="580">
     <Grid>
-        <Label x:Name="label" Content="Default Directory:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="DefaultDirectoryTextBox" HorizontalAlignment="Left" Height="23" Margin="118,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="219"/>
-        <Button x:Name="DirectoryPickButton" Content="Pick..." HorizontalAlignment="Left" Margin="342,14,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="DirectoryPickButton_Click"/>
-        <Label x:Name="label1" Content="File Extensions:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="ExtensionListBox" HorizontalAlignment="Left" Height="162" Margin="118,42,0,0" VerticalAlignment="Top" Width="109"
-                 SelectionChanged="ExtensionListBox_OnSelectionChanged"/>
-        <Label x:Name="label2" Content="Extension" HorizontalAlignment="Left" Margin="232,42,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="ExtensionTextBox" HorizontalAlignment="Left" Height="23" Margin="232,73,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="SaveExtensionButton" Content="Save" HorizontalAlignment="Left" Margin="232,113,0,0" VerticalAlignment="Top" Width="75" Height="23" 
+        <Label x:Name="label" Content="Default Directory:" HorizontalAlignment="Left" Margin="11,36,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="DefaultDirectoryTextBox" HorizontalAlignment="Left" Height="23" Margin="119,40,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="219"/>
+        <Button x:Name="DirectoryPickButton" Content="Pick..." HorizontalAlignment="Left" Margin="343,40,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="DirectoryPickButton_Click"/>
+        <Label x:Name="label1" Content="File Extensions:" HorizontalAlignment="Left" Margin="11,67,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="ExtensionListBox" HorizontalAlignment="Left" Height="162" Margin="119,68,0,0" VerticalAlignment="Top" Width="109"
+                 SelectionChanged="ExtensionListBox_OnSelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Extension}">
+
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Label x:Name="label2" Content="Extension" HorizontalAlignment="Left" Margin="233,68,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label6" Content="Viewer" HorizontalAlignment="Left" Margin="234,95,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="ExtensionTextBox" HorizontalAlignment="Left" Height="23" Margin="300,70,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="88"/>
+        <TextBox x:Name="ViewerProgramTextBox" HorizontalAlignment="Left" Height="23" Margin="300,98,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="280"/>
+        <Button x:Name="SaveExtensionButton" Content="Save" HorizontalAlignment="Left" Margin="233,139,0,0" VerticalAlignment="Top" Width="75" Height="23" 
                 Click="SaveExtensionButton_Click"/>
-        <Button x:Name="DeleteExtensionButton" Content="Delete" HorizontalAlignment="Left" Margin="312,113,0,0" VerticalAlignment="Top" Width="75" Height="23"
+        <Button x:Name="DeleteExtensionButton" Content="Delete" HorizontalAlignment="Left" Margin="313,139,0,0" VerticalAlignment="Top" Width="75" Height="23"
                 Click="DeleteExtensionButton_OnClick"/>
-        <Label x:Name="label3" Content="Category Colors" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="CategoryColorsListBox" HorizontalAlignment="Left" Height="121" Margin="118,215,0,0" VerticalAlignment="Top" Width="109"
+        <Label x:Name="label3" Content="Category Colors" HorizontalAlignment="Left" Margin="11,241,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="CategoryColorsListBox" HorizontalAlignment="Left" Height="121" Margin="119,241,0,0" VerticalAlignment="Top" Width="109"
                  SelectionChanged="CategoryColorsListBox_OnSelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -33,16 +43,17 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Label x:Name="label4" Content="Category:" HorizontalAlignment="Left" Margin="232,215,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="CategoryLabel" Content=" " HorizontalAlignment="Left" Margin="299,215,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label5" Content="Color" HorizontalAlignment="Left" Margin="232,251,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label4" Content="Category:" HorizontalAlignment="Left" Margin="233,241,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="CategoryLabel" Content=" " HorizontalAlignment="Left" Margin="300,241,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label5" Content="Color" HorizontalAlignment="Left" Margin="233,277,0,0" VerticalAlignment="Top"/>
 
 
 
-        <colorPickerWpf:ColorPickRow x:Name="ColorPickRow" HorizontalAlignment="Left" Margin="276,251,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="SaveCategoryColorButton" Content="Save" HorizontalAlignment="Left" Margin="237,287,0,0" VerticalAlignment="Top" Width="75" Height="23"/>
-        <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" Margin="118,382,0,0" VerticalAlignment="Top" Width="75" Height="23"
+        <colorPickerWpf:ColorPickRow x:Name="ColorPickRow" HorizontalAlignment="Left" Margin="277,277,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="SaveCategoryColorButton" Content="Save" HorizontalAlignment="Left" Margin="238,313,0,0" VerticalAlignment="Top" Width="75" Height="23"/>
+        <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" Margin="119,408,0,0" VerticalAlignment="Top" Width="75" Height="23"
                 Click="SaveButton_OnClick"/>
+        <CheckBox x:Name="PortableCheckBox" Content="Portable Mode" HorizontalAlignment="Left" Margin="119,14,0,0" VerticalAlignment="Top"/>
 
 
 

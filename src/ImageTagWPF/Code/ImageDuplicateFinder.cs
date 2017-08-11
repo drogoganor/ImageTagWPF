@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Image = ImageTagWPF.Data.Image;
 
 namespace ImageTagWPF.Code
@@ -12,7 +13,9 @@ namespace ImageTagWPF.Code
     public class ImageDuplicateFinder
     {
         public List<Image> AllImages = new List<Image>();
+
         public List<BatchImage> BatchImages = new List<BatchImage>();
+
         public List<List<Image>> ThreadImageList = new List<List<Image>>();
 
 
@@ -30,10 +33,38 @@ namespace ImageTagWPF.Code
 
             foreach (var allImage in AllImages)
             {
-                if (!File.Exists(allImage.Path))
-                    continue;
+                if (!File.Exists(allImage.Path)) continue;
 
-                var size = Util.GetImageSizeQuick(allImage.Path);
+                Size size = new Size(1, 1);
+                bool gotSize = false;
+                try
+                {
+                    size = Util.GetImageSizeQuick(allImage.Path);
+                    gotSize = true;
+                }
+                catch (Exception ex)
+                {
+                    App.Log.Error("Error getting image dimensions quick: " + ex.Message);
+                }
+
+                if (!gotSize)
+                {
+                    try
+                    {
+                        var img = Bitmap.FromFile(allImage.Path);
+                        if (img != null)
+                        {
+                            size = new Size(img.Width, img.Height);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Log.Error("Error getting image dimensions: " + ex.Message);
+                        continue;
+                    }
+                }
+
+
                 BatchImages.Add(new BatchImage()
                 {
                     Image = allImage,

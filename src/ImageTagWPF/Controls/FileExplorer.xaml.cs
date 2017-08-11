@@ -257,7 +257,7 @@ namespace ImageTagWPF.Controls
             if (Directory.Exists(targetDirectory))
             {
                 // Get all files in this directory
-                var files = Util.GetFilesByExtensions(new DirectoryInfo(targetDirectory), App.ImageTag.Settings.FileExtensions.ToArray());
+                var files = Util.GetFilesByExtensions(new DirectoryInfo(targetDirectory), App.ImageTag.Settings.Extensions.Select(x => x.Extension).ToArray());
 
                 /*
                 var list = new List<ImageFileThumbData>();

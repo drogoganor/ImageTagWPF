@@ -61,8 +61,7 @@ namespace ImageTagWPF.Controls.Forms
 
             //AppenderTextBox.ScrollToEnd();
 
-            //OutputReportControl.ListBox.ItemsSource =
-            //    FileProcessData.Operations.Where(x => x.Severity == FileProcessSeverity.Error);
+            //OutputReportControl.ListBox.ItemsSource = FileProcessData.Operations.Where(x => x.Severity == FileProcessSeverity.Error);
 
 
         }

@@ -123,10 +123,15 @@ namespace ImageTagWPF.Controls
             var file = PathTextBlock.Text;
             if (!String.IsNullOrEmpty(file) && File.Exists(file))
             {
-                if (!String.IsNullOrEmpty(App.ImageTag.Settings.DefaultImageViewProgram))
-                    System.Diagnostics.Process.Start(App.ImageTag.Settings.DefaultImageViewProgram, file);
-                else
-                    System.Diagnostics.Process.Start(file);
+                var programRecord = App.ImageTag.Settings.Extensions.FirstOrDefault(x => file.EndsWith(x.Extension.Substring(1)));
+                if (programRecord != null && File.Exists(programRecord.ViewerProgram))
+                {
+                    if (!String.IsNullOrEmpty(programRecord.ViewerProgram))
+                        System.Diagnostics.Process.Start(programRecord.ViewerProgram, file);
+                    else
+                        System.Diagnostics.Process.Start(file);
+                }
+
             }
         }
     }

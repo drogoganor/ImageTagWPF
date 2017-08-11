@@ -4,29 +4,69 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+
 using ColorPickerWPF.Code;
+
 using ImageTagWPF.Model;
 
 namespace ImageTagWPF.Code
 {
+    using System.IO;
+    using System.Xml.Serialization;
+
+    [Serializable]
+    public class ImageExtensionViewerProgram
+    {
+        public string Extension { get; set; }
+
+        public string ViewerProgram { get; set; }
+    }
+
     [Serializable]
     public class ImageTagSettings : WriteableFileObject<ImageTagSettings>
     {
+        public bool PortableMode = false;
+
         public string DefaultDirectory { get; set; }
+
         public List<TagCategoryColor> TagCategoryColors { get; set; }
-        public List<string> FileExtensions { get; set; }
-        public string DefaultImageViewProgram { get; set; }
+
+        public List<ImageExtensionViewerProgram> Extensions { get; set; }
+
+        [XmlIgnore]
+        public string TempDirectory { get; set; }
+
+        public string TempDirectoryName { get; set; } = "temp";
+        public string ImageTagCacheFolderName { get; set; } = "ImageTagWPF";
 
         public ImageTagSettings()
         {
             TagCategoryColors = new List<TagCategoryColor>();
-            FileExtensions = new List<string>();
+            Extensions = new List<ImageExtensionViewerProgram>();
+        }
 
-
-            string program = string.Empty;
-            if (Util.TryGetRegisteredApplication(".jpg", out program))
+        public void InitializeDirectories()
+        {
+            if (!this.PortableMode)
             {
-                DefaultImageViewProgram = program;
+                this.TempDirectory = Path.Combine(Path.GetTempPath(), this.ImageTagCacheFolderName);
+            }
+            else
+            {
+                this.TempDirectory = Path.Combine(Environment.CurrentDirectory, this.TempDirectoryName);
+            }
+
+            if (!Directory.Exists(this.TempDirectory))
+            {
+                try
+                {
+                    Directory.CreateDirectory(this.TempDirectory);
+                }
+                catch (Exception ex)
+                {
+                    App.Log.Error("Couldn't create temporary directory: " + this.TempDirectory + " : " + ex.Message);
+                    this.TempDirectory = Path.GetTempPath();
+                }
             }
         }
 
@@ -61,13 +101,19 @@ namespace ImageTagWPF.Code
                 FontColor = Colors.MediumPurple
             });
 
-            FileExtensions.AddRange(new []
+            var defaultExts = new[] { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webm", };
+            
+            foreach (var fileExtension in defaultExts)
             {
-                "*.png",
-                "*.jpg",
-                "*.jpeg",
-                "*.gif"
-            });
+                var program = string.Empty;
+                Util.TryGetRegisteredApplication(fileExtension.Substring(1), out program);
+
+                Extensions.Add(new ImageExtensionViewerProgram()
+                {
+                    Extension = fileExtension,
+                    ViewerProgram = program
+                });
+            }
         }
 
     }
